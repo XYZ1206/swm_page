@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+    content="Project page for GSWAM, a unified Gaussian world action model for robotic manipulation.">
+  <meta name="keywords" content="Robotic Manipulation, World Action Model, 3D Gaussian Splatting">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GSWAM: A Unified Gaussian World Action Model for Robotic Manipulation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Manrope:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.svg">
+</head>
+
+<body id="top">
+  <div class="page-glow page-glow-left" aria-hidden="true"></div>
+  <div class="page-glow page-glow-right" aria-hidden="true"></div>
+
+  <header class="hero-shell">
+    <nav class="top-nav" aria-label="Primary">
+      <a class="brand-mark" href="#top">GSWAM</a>
+      <div class="nav-links">
+        <a href="#abstract">Abstract</a>
+        <a href="#motivation">Motivation</a>
+        <a href="#method">Method</a>
+        <a href="#experiments">Experiments</a>
+        <a href="#real-world">Real-world</a>
+        <a href="#libero">LIBERO</a>
+        <a href="#rlbench">RLBench</a>
+        <a href="#world-model">World Model</a>
+      </div>
+    </nav>
+
+    <section class="hero-stack section-shell">
+      <div class="hero-copy">
+        <h1>GSWAM: A Unified Gaussian World Action Model for Robotic Manipulation</h1>
+
+        <div class="hero-meta">
+          <p class="authors-line">Anonymous Authors</p>
+        </div>
+
+        <div class="cta-row">
+          <a class="cta-button" href="#">Paper</a>
+          <a class="cta-button" href="#">arXiv</a>
+          <a class="cta-button" href="#">Code</a>
+        </div>
+
+        <p class="hero-tldr">
+          <strong>TL;DR:</strong> GSWAM jointly models 3D scene dynamics and robot actions in a shared
+          3D-anchored space for geometrically consistent world modeling and spatially grounded action
+          reasoning.
+        </p>
+      </div>
+
+      <div class="hero-media" id="overview-video">
+        <div class="media-card">
+          <video class="hero-video" controls playsinline preload="metadata">
+            <source src="./static/video/overview.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      </div>
+    </section>
+  </header>
+
+  <main>
+    <section id="abstract" class="section-shell content-shell content-section">
+      <div class="section-header section-header-centered">
+        <h2 class="section-title-simple">Abstract</h2>
+      </div>
+      <div class="body-card prose-card prose-card-large">
+        <p>
+          World action models (WAMs) provide a promising learning paradigm for robotic manipulation by jointly modeling
+          future observations and robot actions. However, most existing methods operate in 2D image spaces, making it
+          difficult to explicitly capture spatial scene dynamics, maintain cross-view geometric consistency, and
+          effectively align visual observations with robot actions. To address this, we propose GSWAM, a world action
+          model based on 3D Gaussian Splatting (3DGS), which jointly models scene dynamics and robot actions in a
+          unified 3D space. We first compress 3DGS scenes into geometrically consistent latent representations using a
+          Gaussian variational autoencoder (GSVAE). Furthermore, we align scenes and actions within a shared
+          3D-anchored space, enabling GSWAM to explicitly model the joint distribution between 3D scene dynamics and
+          robot actions. Based on this representation, we design a 3D-anchor-based spatial diffusion transformer to
+          model spatial interactions between scenes and actions. To accommodate their different generative
+          characteristics, we further employ decoupled flow timesteps for the two modalities, allowing the model to
+          jointly learn scene-action generation and action-conditioned future scene prediction. Experiments on both
+          simulated and real-world robotic manipulation tasks demonstrate that GSWAM outperforms representative
+          existing methods in both action generation and future scene prediction.
+        </p>
+      </div>
+    </section>
+
+    <section id="motivation" class="section-shell content-shell content-section">
+      <div class="section-header section-header-centered">
+        <h2 class="section-title-simple">Motivation</h2>
+      </div>
+      <figure class="body-card figure-card">
+        <video autoplay muted loop playsinline preload="metadata">
+          <source src="./static/video/motivation.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+        <figcaption>
+          2D WAMs lack the ability to model spatial physical dynamics and suffer from cross-view geometric
+          inconsistency, while GSWAM jointly models 3D scenes and actions in a 3D-anchored space, enabling
+          geometrically consistent world modeling and spatially grounded action reasoning.
+        </figcaption>
+      </figure>
+    </section>
+
+    <section id="method" class="section-shell content-shell content-section">
+      <div class="section-header section-header-centered">
+        <h2 class="section-title-simple">Method</h2>
+      </div>
+      <figure class="body-card figure-card">
+        <video autoplay muted loop playsinline preload="metadata">
+          <source src="./static/video/method.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+        <figcaption>
+          <strong>Overview of GSWAM.</strong> Given multi-view observations, we construct a structured 3DGS scene and
+          compress it into geometrically consistent 3D-aware latents using GSVAE. Scene tokens and action tokens are
+          then aligned in a unified 3D-anchored space, where a spatial diffusion transformer models their joint
+          distribution with decoupled flow timesteps. The model jointly predicts future robot actions and future 3DGS
+          scene latents, which are decoded into future 3D scenes for rendering and evaluation.
+        </figcaption>
+      </figure>
+    </section>
+
+    <section id="experiments" class="section-shell content-shell content-section">
+      <div class="section-header section-header-centered">
+        <h2 class="section-title-simple">Experiments</h2>
+      </div>
+
+      <article id="real-world" class="body-card subsection-card">
+        <h3>Real-world</h3>
+        <div class="video-carousel" data-carousel>
+          <button class="carousel-arrow carousel-prev" type="button" aria-label="Previous video">&#10094;</button>
+
+          <div class="carousel-window">
+            <div class="carousel-track">
+              <figure class="carousel-slide is-active">
+                <video controls playsinline preload="metadata">
+                  <source src="./static/video/realworld/0001.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <figcaption>Place cup on plate</figcaption>
+              </figure>
+              <figure class="carousel-slide">
+                <video controls playsinline preload="metadata">
+                  <source src="./static/video/realworld/0002.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <figcaption>Place carrot in basket</figcaption>
+              </figure>
+              <figure class="carousel-slide">
+                <video controls playsinline preload="metadata">
+                  <source src="./static/video/realworld/0003.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <figcaption>Push block to pile</figcaption>
+              </figure>
+              <figure class="carousel-slide">
+                <video controls playsinline preload="metadata">
+                  <source src="./static/video/realworld/0004.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <figcaption>Stack bowls</figcaption>
+              </figure>
+              <figure class="carousel-slide">
+                <video controls playsinline preload="metadata">
+                  <source src="./static/video/realworld/0005.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <figcaption>Take carrot and banana out of basket</figcaption>
+              </figure>
+            </div>
+          </div>
+
+          <button class="carousel-arrow carousel-next" type="button" aria-label="Next video">&#10095;</button>
+        </div>
+
+        <div class="carousel-dots" aria-label="Real-world video navigation">
+          <button class="carousel-dot is-active" type="button" aria-label="Show video 1"></button>
+          <button class="carousel-dot" type="button" aria-label="Show video 2"></button>
+          <button class="carousel-dot" type="button" aria-label="Show video 3"></button>
+          <button class="carousel-dot" type="button" aria-label="Show video 4"></button>
+          <button class="carousel-dot" type="button" aria-label="Show video 5"></button>
+        </div>
+      </article>
+
+      <article id="libero" class="body-card subsection-card">
+        <h3>LIBERO</h3>
+        <div class="libero-grid">
+          <figure class="video-card">
+            <video controls playsinline preload="metadata">
+              <source src="./static/video/libero/goal/put_the_bowl_on_the_plate.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+            <figcaption>put the bowl on the plate</figcaption>
+          </figure>
+          <figure class="video-card">
+            <video controls playsinline preload="metadata">
+              <source src="./static/video/libero/goal/put_the_bowl_on_the_stove.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+            <figcaption>put the bowl on the stove</figcaption>
+          </figure>
+          <figure class="video-card">
+            <video controls playsinline preload="metadata">
+              <source src="./static/video/libero/long/put_the_white_mug_on_the_left_plate_and_put_the_yellow_and_white_mug_on_the_right_plate.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+            <figcaption>put the white mug on the left plate and put the yellow and white mug on the right plate</figcaption>
+          </figure>
+          <figure class="video-card">
+            <video controls playsinline preload="metadata">
+              <source src="./static/video/libero/long/turn_on_the_stove_and_put_the_moka_pot_on_it.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+            <figcaption>turn on the stove and put the moka pot on it</figcaption>
+          </figure>
+          <figure class="video-card">
+            <video controls playsinline preload="metadata">
+              <source src="./static/video/libero/object/pick_up_the_chocolate_pudding_and_place_it_in_the_basket.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+            <figcaption>pick up the chocolate pudding and place it in the basket</figcaption>
+          </figure>
+          <figure class="video-card">
+            <video controls playsinline preload="metadata">
+              <source src="./static/video/libero/object/pick_up_the_orange_juice_and_place_it_in_the_basket.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+            <figcaption>pick up the orange juice and place it in the basket</figcaption>
+          </figure>
+          <figure class="video-card">
+            <video controls playsinline preload="metadata">
+              <source src="./static/video/libero/spatial/pick_up_the_black_bowl_between_the_plate_and_the_ramekin_and_place_it_on_the_plate.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+            <figcaption>pick up the black bowl between the plate and the ramekin and place it on the plate</figcaption>
+          </figure>
+          <figure class="video-card">
+            <video controls playsinline preload="metadata">
+              <source src="./static/video/libero/spatial/pick_up_the_black_bowl_next_to_the_cookie_box_and_place_it_on_the_plate.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+            <figcaption>pick up the black bowl next to the cookie box and place it on the plate</figcaption>
+          </figure>
+        </div>
+      </article>
+
+      <div class="subsection-grid">
+        <article id="rlbench" class="body-card subsection-card">
+          <h3>RLBench</h3>
+          <div class="libero-grid">
+            <figure class="video-card">
+              <video controls playsinline preload="metadata">
+                <source src="./static/video/rlbench/close_the_red_jar.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+              <figcaption>close the red jar</figcaption>
+            </figure>
+            <figure class="video-card">
+              <video controls playsinline preload="metadata">
+                <source src="./static/video/rlbench/push_the_maroon_button_then_push_the_green_button.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+              <figcaption>push the maroon button then push the green button</figcaption>
+            </figure>
+            <figure class="video-card">
+              <video controls playsinline preload="metadata">
+                <source src="./static/video/rlbench/put_the_item_in_the_middle_drawer.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+              <figcaption>put the item in the middle drawer</figcaption>
+            </figure>
+            <figure class="video-card">
+              <video controls playsinline preload="metadata">
+                <source src="./static/video/rlbench/sweep_dirt_to_the_tall_dustpan.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+              <figcaption>sweep dirt to the tall dustpan</figcaption>
+            </figure>
+          </div>
+        </article>
+
+        <article id="world-model" class="body-card subsection-card">
+          <h3>World Model</h3>
+          <div class="worldmodel-list">
+            <figure class="video-card">
+              <video controls playsinline preload="metadata">
+                <source src="./static/video/worldmodel/libero.mp4?v=20260608-193942" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+              <figcaption>libero</figcaption>
+            </figure>
+            <figure class="video-card">
+              <video controls playsinline preload="metadata">
+                <source src="./static/video/worldmodel/realworld-1.mp4?v=20260608-193343" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+              <figcaption>realworld-1</figcaption>
+            </figure>
+            <figure class="video-card">
+              <video controls playsinline preload="metadata">
+                <source src="./static/video/worldmodel/realworld-2.mp4?v=20260608-193416" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+              <figcaption>realworld-2</figcaption>
+            </figure>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    document.querySelectorAll("[data-carousel]").forEach((carousel) => {
+      const track = carousel.querySelector(".carousel-track");
+      const slides = Array.from(track.querySelectorAll(".carousel-slide"));
+      const dots = Array.from(carousel.parentElement.querySelectorAll(".carousel-dot"));
+      const prevButton = carousel.querySelector(".carousel-prev");
+      const nextButton = carousel.querySelector(".carousel-next");
+      let currentIndex = 0;
+
+      function updateCarousel(nextIndex) {
+        currentIndex = (nextIndex + slides.length) % slides.length;
+        track.style.transform = `translateX(-${currentIndex * 100}%)`;
+
+        slides.forEach((slide, index) => {
+          slide.classList.toggle("is-active", index === currentIndex);
+          slide.querySelectorAll("video").forEach((video) => {
+            if (index !== currentIndex) {
+              video.pause();
+            }
+          });
+        });
+
+        dots.forEach((dot, index) => {
+          dot.classList.toggle("is-active", index === currentIndex);
+        });
+      }
+
+      prevButton.addEventListener("click", () => updateCarousel(currentIndex - 1));
+      nextButton.addEventListener("click", () => updateCarousel(currentIndex + 1));
+
+      dots.forEach((dot, index) => {
+        dot.addEventListener("click", () => updateCarousel(index));
+      });
+
+      updateCarousel(0);
+    });
+  </script>
+</body>
+
+</html>
