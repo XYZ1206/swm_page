@@ -1,0 +1,34 @@
+[
+ {
+  "stem": "episode_1395_20260725_201904",
+  "caption": "Put the red chilli into the stainless-steel bowl",
+  "ar": 1.5703,
+  "prompt": "把红色尖椒放进不锈钢碗中",
+  "video": "./static/video/flow3d/episode_1395_20260725_201904__flow3d.mp4",
+  "poster": "./static/images/flow3d/episode_1395_20260725_201904__flow3d.jpg"
+ },
+ {
+  "stem": "episode_0039_20260802_104111",
+  "caption": "Put the Hello Kitty charm right of the car diffuser",
+  "ar": 1.4378,
+  "prompt": "把HelloKity挂件放在蓝色车载香薰盒右边",
+  "video": "./static/video/flow3d/episode_0039_20260802_104111__flow3d.mp4",
+  "poster": "./static/images/flow3d/episode_0039_20260802_104111__flow3d.jpg"
+ },
+ {
+  "stem": "episode_0152_20260813_174316",
+  "caption": "Put the mug to the left of the blue tray",
+  "ar": 1.5495,
+  "prompt": "把马克杯放置到在蓝色托盘的左边",
+  "video": "./static/video/flow3d/episode_0152_20260813_174316__flow3d.mp4",
+  "poster": "./static/images/flow3d/episode_0152_20260813_174316__flow3d.jpg"
+ },
+ {
+  "stem": "episode_0350_20260808_145449",
+  "caption": "Put the green tin right of the vending-machine toy",
+  "ar": 1.4152,
+  "prompt": "把六角绿色饼干盒放在红色饮料机玩具的右边",
+  "video": "./static/video/flow3d/episode_0350_20260808_145449__flow3d.mp4",
+  "poster": "./static/images/flow3d/episode_0350_20260808_145449__flow3d.jpg"
+ }
+]

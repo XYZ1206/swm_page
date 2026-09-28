@@ -1,0 +1,217 @@
+{
+ "source_label": {
+  "demo5": "Real-world (Tabletop)",
+  "agibot": "Real-world (AgiBot)",
+  "robotwin": "Simulation (RoboTwin)",
+  "maniskill": "Simulation (ManiSkill)",
+  "metaworld": "Simulation (MetaWorld)"
+ },
+ "source_order": [
+  "demo5",
+  "agibot",
+  "robotwin",
+  "maniskill",
+  "metaworld"
+ ],
+ "cases": {
+  "demo5": [
+   {
+    "slug": "throw_away_trash",
+    "caption": "Throw away the trash",
+    "zh": "丢垃圾",
+    "tracks": "./static/video/cases/demo5/throw_away_trash_tracks_static.mp4",
+    "pca": "./static/video/cases/demo5/throw_away_trash_pca3col.mp4"
+   },
+   {
+    "slug": "close_drawer",
+    "caption": "Close the drawer",
+    "zh": "关抽屉",
+    "tracks": "./static/video/cases/demo5/close_drawer_tracks_static.mp4",
+    "pca": "./static/video/cases/demo5/close_drawer_pca3col.mp4"
+   },
+   {
+    "slug": "close_washing_machine",
+    "caption": "Close the washing machine",
+    "zh": "关洗衣机",
+    "tracks": "./static/video/cases/demo5/close_washing_machine_tracks_static.mp4",
+    "pca": "./static/video/cases/demo5/close_washing_machine_pca3col.mp4"
+   },
+   {
+    "slug": "take_out_shoes",
+    "caption": "Take the shoes out",
+    "zh": "取出鞋子",
+    "tracks": "./static/video/cases/demo5/take_out_shoes_tracks_static.mp4",
+    "pca": "./static/video/cases/demo5/take_out_shoes_pca3col.mp4"
+   },
+   {
+    "slug": "put_bear_in_red_circle",
+    "caption": "Put the bear inside the red circle",
+    "zh": "把小熊放到红圈内",
+    "tracks": "./static/video/cases/demo5/put_bear_in_red_circle_tracks_static.mp4",
+    "pca": "./static/video/cases/demo5/put_bear_in_red_circle_pca3col.mp4"
+   },
+   {
+    "slug": "put_corn_in_basket",
+    "caption": "Put the corn into the basket",
+    "zh": "把玉米放到框中",
+    "tracks": "./static/video/cases/demo5/put_corn_in_basket_tracks_static.mp4",
+    "pca": "./static/video/cases/demo5/put_corn_in_basket_pca3col.mp4"
+   },
+   {
+    "slug": "put_tissue_in_drawer",
+    "caption": "Put the tissue into the drawer",
+    "zh": "把纸巾放到抽屉中",
+    "tracks": "./static/video/cases/demo5/put_tissue_in_drawer_tracks_static.mp4",
+    "pca": "./static/video/cases/demo5/put_tissue_in_drawer_pca3col.mp4"
+   },
+   {
+    "slug": "put_can_on_box",
+    "caption": "Put the can on the box",
+    "zh": "把罐子放到盒子上",
+    "tracks": "./static/video/cases/demo5/put_can_on_box_tracks_static.mp4",
+    "pca": "./static/video/cases/demo5/put_can_on_box_pca3col.mp4"
+   },
+   {
+    "slug": "open_drawer",
+    "caption": "Open the drawer",
+    "zh": "拉开抽屉",
+    "tracks": "./static/video/cases/demo5/open_drawer_tracks_static.mp4",
+    "pca": "./static/video/cases/demo5/open_drawer_pca3col.mp4"
+   },
+   {
+    "slug": "move_book",
+    "caption": "Move the book",
+    "zh": "移动书本",
+    "tracks": "./static/video/cases/demo5/move_book_tracks_static.mp4",
+    "pca": "./static/video/cases/demo5/move_book_pca3col.mp4"
+   },
+   {
+    "slug": "move_spoon",
+    "caption": "Move the spoon",
+    "zh": "移动勺子",
+    "tracks": "./static/video/cases/demo5/move_spoon_tracks_static.mp4",
+    "pca": "./static/video/cases/demo5/move_spoon_pca3col.mp4"
+   },
+   {
+    "slug": "move_hairpin",
+    "caption": "Move the hairpin",
+    "zh": "移动发卡",
+    "tracks": "./static/video/cases/demo5/move_hairpin_tracks_static.mp4",
+    "pca": "./static/video/cases/demo5/move_hairpin_pca3col.mp4"
+   },
+   {
+    "slug": "move_notebook",
+    "caption": "Move the notebook",
+    "zh": "移动本子",
+    "tracks": "./static/video/cases/demo5/move_notebook_tracks_static.mp4",
+    "pca": "./static/video/cases/demo5/move_notebook_pca3col.mp4"
+   },
+   {
+    "slug": "move_box",
+    "caption": "Move the box",
+    "zh": "移动盒子",
+    "tracks": "./static/video/cases/demo5/move_box_tracks_static.mp4",
+    "pca": "./static/video/cases/demo5/move_box_pca3col.mp4"
+   },
+   {
+    "slug": "move_remote",
+    "caption": "Move the remote control",
+    "zh": "移动遥控器",
+    "tracks": "./static/video/cases/demo5/move_remote_tracks_static.mp4",
+    "pca": "./static/video/cases/demo5/move_remote_pca3col.mp4"
+   }
+  ],
+  "agibot": [
+   {
+    "slug": "agibot_put_tissue_in_drawer",
+    "caption": "Put the tissue into the drawer",
+    "zh": "放纸巾到抽屉",
+    "tracks": "./static/video/cases/agibot/agibot_put_tissue_in_drawer_tracks_static.mp4",
+    "pca": "./static/video/cases/agibot/agibot_put_tissue_in_drawer_pca3col.mp4"
+   },
+   {
+    "slug": "put_plate_in_microwave",
+    "caption": "Put the plate into the microwave",
+    "zh": "盘子放到微波炉里",
+    "tracks": "./static/video/cases/agibot/put_plate_in_microwave_tracks_static.mp4",
+    "pca": "./static/video/cases/agibot/put_plate_in_microwave_pca3col.mp4"
+   }
+  ],
+  "robotwin": [
+   {
+    "slug": "robotwin_throw_away_trash",
+    "caption": "Throw away the trash",
+    "zh": "丢垃圾",
+    "tracks": "./static/video/cases/robotwin/robotwin_throw_away_trash_tracks_static.mp4",
+    "pca": "./static/video/cases/robotwin/robotwin_throw_away_trash_pca3col.mp4"
+   },
+   {
+    "slug": "put_cup_on_plate",
+    "caption": "Put the cup on the plate",
+    "zh": "把杯子放到盘子上",
+    "tracks": "./static/video/cases/robotwin/put_cup_on_plate_tracks_static.mp4",
+    "pca": "./static/video/cases/robotwin/put_cup_on_plate_pca3col.mp4"
+   },
+   {
+    "slug": "shake_bottle",
+    "caption": "Shake the bottle",
+    "zh": "摇瓶子",
+    "tracks": "./static/video/cases/robotwin/shake_bottle_tracks_static.mp4",
+    "pca": "./static/video/cases/robotwin/shake_bottle_pca3col.mp4"
+   },
+   {
+    "slug": "rotate_qr_board",
+    "caption": "Rotate the QR-code board",
+    "zh": "旋转二维码牌",
+    "tracks": "./static/video/cases/robotwin/rotate_qr_board_tracks_static.mp4",
+    "pca": "./static/video/cases/robotwin/rotate_qr_board_pca3col.mp4"
+   },
+   {
+    "slug": "adjust_bottle",
+    "caption": "Adjust the bottle",
+    "zh": "调整瓶子",
+    "tracks": "./static/video/cases/robotwin/adjust_bottle_tracks_static.mp4",
+    "pca": "./static/video/cases/robotwin/adjust_bottle_pca3col.mp4"
+   }
+  ],
+  "maniskill": [
+   {
+    "slug": "plug_charger",
+    "caption": "Plug in the charger",
+    "zh": "插插座",
+    "tracks": "./static/video/cases/maniskill/plug_charger_tracks_static.mp4",
+    "pca": "./static/video/cases/maniskill/plug_charger_pca3col.mp4"
+   },
+   {
+    "slug": "insert_peg",
+    "caption": "Insert the peg",
+    "zh": "插销",
+    "tracks": "./static/video/cases/maniskill/insert_peg_tracks_static.mp4",
+    "pca": "./static/video/cases/maniskill/insert_peg_pca3col.mp4"
+   }
+  ],
+  "metaworld": [
+   {
+    "slug": "open_cabinet_door",
+    "caption": "Open the cabinet door",
+    "zh": "开柜门",
+    "tracks": "./static/video/cases/metaworld/open_cabinet_door_tracks_static.mp4",
+    "pca": "./static/video/cases/metaworld/open_cabinet_door_pca3col.mp4"
+   },
+   {
+    "slug": "rotate_dial",
+    "caption": "Rotate the dial",
+    "zh": "旋转开关",
+    "tracks": "./static/video/cases/metaworld/rotate_dial_tracks_static.mp4",
+    "pca": "./static/video/cases/metaworld/rotate_dial_pca3col.mp4"
+   },
+   {
+    "slug": "put_on_lid",
+    "caption": "Put on the lid",
+    "zh": "盖盖子",
+    "tracks": "./static/video/cases/metaworld/put_on_lid_tracks_static.mp4",
+    "pca": "./static/video/cases/metaworld/put_on_lid_pca3col.mp4"
+   }
+  ]
+ }
+}

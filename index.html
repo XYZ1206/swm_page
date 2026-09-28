@@ -4,10 +4,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="description"
-    content="Project page for GSWAM, a unified Gaussian world action model for robotic manipulation.">
-  <meta name="keywords" content="Robotic Manipulation, World Action Model, 3D Gaussian Splatting">
+    content="Project page for DynaRep, a visual representation world model that jointly models future DINO representations and 3D object flow for object-centric dynamics.">
+  <meta name="keywords"
+    content="Robotic Manipulation, World Model, Visual Representation, DINO, 3D Object Flow, Diffusion Transformer">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>GSWAM: A Unified Gaussian World Action Model for Robotic Manipulation</title>
+  <title>DynaRep: A Visual Representation World Model for Object-Centric Dynamics</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
@@ -23,22 +24,20 @@
 
   <header class="hero-shell">
     <nav class="top-nav" aria-label="Primary">
-      <a class="brand-mark" href="#top">GSWAM</a>
+      <a class="brand-mark" href="#top">DynaRep</a>
       <div class="nav-links">
         <a href="#abstract">Abstract</a>
-        <a href="#motivation">Motivation</a>
         <a href="#method">Method</a>
-        <a href="#experiments">Experiments</a>
-        <a href="#real-world">Real-world</a>
-        <a href="#libero">LIBERO</a>
-        <a href="#rlbench">RLBench</a>
-        <a href="#world-model">World Model</a>
+        <a href="#flow3d">3D Flow</a>
+        <a href="#results">Results</a>
+        <a href="#object-flow">Object Flow</a>
+        <a href="#dino-prediction">DINO Prediction</a>
       </div>
     </nav>
 
     <section class="hero-stack section-shell">
       <div class="hero-copy">
-        <h1>GSWAM: A Unified Gaussian World Action Model for Robotic Manipulation</h1>
+        <h1>DynaRep: A Visual Representation World Model for Object-Centric Dynamics</h1>
 
         <div class="hero-meta">
           <p class="authors-line">Anonymous Authors</p>
@@ -51,20 +50,22 @@
         </div>
 
         <p class="hero-tldr">
-          <strong>TL;DR:</strong> GSWAM jointly models 3D scene dynamics and robot actions in a shared
-          3D-anchored space for geometrically consistent world modeling and spatially grounded action
-          reasoning.
+          <strong>TL;DR:</strong> DynaRep represents future world states in the DINO representation space rather
+          than a pixel-reconstruction latent, and jointly models future visual representations and 3D object flow
+          with asymmetric, modality-specific noise schedules &mdash; letting visual states stabilize earlier and
+          continuously guide flow generation.
         </p>
       </div>
 
-      <div class="hero-media" id="overview-video">
-        <div class="media-card">
-          <video class="hero-video" controls playsinline preload="metadata">
-            <source src="./static/video/overview.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-          </video>
-        </div>
-      </div>
+      <figure class="hero-media media-card">
+        <img src="./static/images/teaser.png"
+          alt="Comparison between a pixel-VAE based flow world model and DynaRep: DynaRep models future states in the DINO representation space, giving stronger world-state guidance for 3D object flow.">
+        <figcaption>
+          <strong>Future-state representation matters for 3D object flow generation.</strong> Compared with
+          pixel-VAE-based flow world models, DynaRep models future states in the DINO representation space, which
+          preserves richer semantic and geometric structure for dynamics modeling.
+        </figcaption>
+      </figure>
     </section>
   </header>
 
@@ -75,39 +76,23 @@
       </div>
       <div class="body-card prose-card prose-card-large">
         <p>
-          World action models (WAMs) provide a promising learning paradigm for robotic manipulation by jointly modeling
-          future observations and robot actions. However, most existing methods operate in 2D image spaces, making it
-          difficult to explicitly capture spatial scene dynamics, maintain cross-view geometric consistency, and
-          effectively align visual observations with robot actions. To address this, we propose GSWAM, a world action
-          model based on 3D Gaussian Splatting (3DGS), which jointly models scene dynamics and robot actions in a
-          unified 3D space. We first compress 3DGS scenes into geometrically consistent latent representations using a
-          Gaussian variational autoencoder (GSVAE). Furthermore, we align scenes and actions within a shared
-          3D-anchored space, enabling GSWAM to explicitly model the joint distribution between 3D scene dynamics and
-          robot actions. Based on this representation, we design a 3D-anchor-based spatial diffusion transformer to
-          model spatial interactions between scenes and actions. To accommodate their different generative
-          characteristics, we further employ decoupled flow timesteps for the two modalities, allowing the model to
-          jointly learn scene-action generation and action-conditioned future scene prediction. Experiments on both
-          simulated and real-world robotic manipulation tasks demonstrate that GSWAM outperforms representative
-          existing methods in both action generation and future scene prediction.
+          Most embodied world models predict futures in latent spaces optimized for pixel reconstruction, which may
+          not be ideal for capturing manipulation-relevant dynamics. We present DynaRep, a world model that
+          represents future world states in a visual representation space rich in semantic and geometric structure.
+          To this end, we jointly model future DINO representations and 3D object flow to capture object-centric
+          dynamics. To make dense DINO features tractable for generative modeling, we introduce DINO-VAE, which
+          performs channel and temporal compression with causal temporal modeling to produce compact latents while
+          preserving informative visual structure. Building on this compact representation space, we employ a
+          unified diffusion transformer with joint attention to capture the bidirectional dependencies between
+          future visual representations and 3D object flow. To further strengthen cross-modal coupling, DynaRep
+          adopts asymmetric modality-specific noise schedules, allowing visual representations to stabilize earlier
+          during denoising and continuously guide 3D object flow generation. Experiments on simulated and real-world
+          manipulation data show that DINO-derived representations provide a more effective space for future
+          modeling than pixel-reconstruction-oriented latents, leading to more geometrically consistent and
+          task-relevant 3D object flow. These results demonstrate the value of predictive visual representations for
+          modeling object-centric dynamics in embodied interaction.
         </p>
       </div>
-    </section>
-
-    <section id="motivation" class="section-shell content-shell content-section">
-      <div class="section-header section-header-centered">
-        <h2 class="section-title-simple">Motivation</h2>
-      </div>
-      <figure class="body-card figure-card">
-        <video autoplay muted loop playsinline preload="metadata">
-          <source src="./static/video/motivation.mp4" type="video/mp4">
-          Your browser does not support the video tag.
-        </video>
-        <figcaption>
-          2D WAMs lack the ability to model spatial physical dynamics and suffer from cross-view geometric
-          inconsistency, while GSWAM jointly models 3D scenes and actions in a 3D-anchored space, enabling
-          geometrically consistent world modeling and spatially grounded action reasoning.
-        </figcaption>
-      </figure>
     </section>
 
     <section id="method" class="section-shell content-shell content-section">
@@ -115,245 +100,1028 @@
         <h2 class="section-title-simple">Method</h2>
       </div>
       <figure class="body-card figure-card">
-        <video autoplay muted loop playsinline preload="metadata">
-          <source src="./static/video/method.mp4" type="video/mp4">
-          Your browser does not support the video tag.
-        </video>
+        <img src="./static/images/dynarep.png"
+          alt="DynaRep training framework: RGB is encoded by DINO and compressed by DINO-VAE into compact visual latents; the visual and 3D object flow streams are corrupted with modality-specific noise schedules and jointly modeled by a unified diffusion transformer.">
         <figcaption>
-          <strong>Overview of GSWAM.</strong> Given multi-view observations, we construct a structured 3DGS scene and
-          compress it into geometrically consistent 3D-aware latents using GSVAE. Scene tokens and action tokens are
-          then aligned in a unified 3D-anchored space, where a spatial diffusion transformer models their joint
-          distribution with decoupled flow timesteps. The model jointly predicts future robot actions and future 3DGS
-          scene latents, which are decoded into future 3D scenes for rendering and evaluation.
+          <strong>Training framework of DynaRep.</strong> RGB observations are encoded by DINO and compressed by
+          DINO-VAE into compact visual latents. The visual and 3D object flow streams are independently corrupted
+          with modality-specific noise schedules and jointly modeled by DynaRep, conditioned on the initial object
+          point and language instruction.
         </figcaption>
       </figure>
+
+      <div class="contrib-grid">
+        <article class="body-card contrib-card">
+          <span class="contrib-index" aria-hidden="true">01</span>
+          <h3>A visual representation world model</h3>
+          <p>
+            DynaRep jointly models future visual representations and 3D object flow within a single generative
+            framework. The representation latents and the flow tokens are concatenated and processed by one
+            diffusion transformer, whose joint attention lets the two streams interact bidirectionally: predicted
+            future visual states guide flow generation, while flow supplies explicit object-motion information for
+            predicting future scene states. Future scene states and object-centric dynamics are thereby coupled
+            rather than treated as separate prediction problems.
+          </p>
+        </article>
+
+        <article class="body-card contrib-card">
+          <span class="contrib-index" aria-hidden="true">02</span>
+          <h3>DINO-VAE: a compact, generation-friendly latent space</h3>
+          <p>
+            Dense DINO features are too high-dimensional to diffuse directly. DINO-VAE compresses them along both
+            time and channels: attention pooling aggregates every four consecutive frames into one temporal latent,
+            and a causal ViT encoder maps the 1024-dimensional features into a low-dimensional latent that a
+            symmetric decoder inverts. Latent regularization &mdash; a &beta;-VAE objective with a cosine
+            consistency term &mdash; keeps the space smooth, so the result stays compact and generation-friendly
+            while preserving the key visual information.
+          </p>
+        </article>
+
+        <article class="body-card contrib-card">
+          <span class="contrib-index" aria-hidden="true">03</span>
+          <h3>Modality-specific noise scheduling</h3>
+          <p>
+            The two streams do not share a diffusion timestep. Timesteps are sampled independently and mapped
+            through shifted, modality-specific schedules, with flow biased toward higher noise so that visual
+            representations form stable structure earlier and keep guiding motion &mdash; a latent-forcing-style
+            asymmetric denoising trajectory. Because training sees varied visual&ndash;flow noise combinations, one
+            model also conditions in either direction: clean future representations give flow generation (inverse
+            dynamics), and clean flow gives future representation prediction.
+          </p>
+        </article>
+      </div>
     </section>
 
-    <section id="experiments" class="section-shell content-shell content-section">
+    <section id="flow3d" class="section-shell content-shell content-section">
       <div class="section-header section-header-centered">
-        <h2 class="section-title-simple">Experiments</h2>
+        <h2 class="section-title-simple">What Is 3D Object Flow?</h2>
+      </div>
+      <div class="body-card prose-card">
+        <p>
+          3D object flow is the motion representation DynaRep predicts: a set of query points on the manipulated
+          object, tracked through the episode as metric 3D trajectories. The clips below render that representation
+          directly in 3D &mdash; 64 query points drawn on the point cloud of the <em>first</em> frame, with each
+          trajectory growing as the episode plays and coloured by time (cyan at the start, red at the end). The
+          scene itself is frozen; only the trajectories move.
+        </p>
+        <p style="margin-top: 0.9rem;">
+          <strong>The trajectories shown here are generated by DynaRep.</strong> Rendering them in 3D, rather
+          than projected onto the image, makes the metric structure of the predicted motion visible &mdash; how
+          far the object travels, along what path, and at what height above the table.
+        </p>
       </div>
 
-      <article id="real-world" class="body-card subsection-card">
-        <h3>Real-world</h3>
-        <div class="video-carousel" data-carousel>
-          <button class="carousel-arrow carousel-prev" type="button" aria-label="Previous video">&#10094;</button>
+      <!-- 顺序按宽高比配对:同一行两条高度才齐(1.57/1.55 一行,1.44/1.42 一行)。
+           网格是 align-items: start,不齐就会一高一矮地错开。 -->
+      <div class="flow3d-grid" data-inview-videos>
+        <figure class="body-card flow3d-card" style="--f3d-ar: 1.5703">
+          <video controls playsinline muted loop preload="none"
+            poster="./static/images/flow3d/episode_1395_20260725_201904__flow3d.jpg"
+            data-src="./static/video/flow3d/episode_1395_20260725_201904__flow3d.mp4"></video>
+          <figcaption>Put the red chilli into the stainless-steel bowl</figcaption>
+        </figure>
+        <figure class="body-card flow3d-card" style="--f3d-ar: 1.5495">
+          <video controls playsinline muted loop preload="none"
+            poster="./static/images/flow3d/episode_0152_20260813_174316__flow3d.jpg"
+            data-src="./static/video/flow3d/episode_0152_20260813_174316__flow3d.mp4"></video>
+          <figcaption>Put the mug to the left of the blue tray</figcaption>
+        </figure>
+        <figure class="body-card flow3d-card" style="--f3d-ar: 1.4378">
+          <video controls playsinline muted loop preload="none"
+            poster="./static/images/flow3d/episode_0039_20260802_104111__flow3d.jpg"
+            data-src="./static/video/flow3d/episode_0039_20260802_104111__flow3d.mp4"></video>
+          <figcaption>Put the Hello Kitty charm right of the car diffuser</figcaption>
+        </figure>
+        <figure class="body-card flow3d-card" style="--f3d-ar: 1.4152">
+          <video controls playsinline muted loop preload="none"
+            poster="./static/images/flow3d/episode_0350_20260808_145449__flow3d.jpg"
+            data-src="./static/video/flow3d/episode_0350_20260808_145449__flow3d.mp4"></video>
+          <figcaption>Put the green tin right of the vending-machine toy</figcaption>
+        </figure>
+      </div>
+    </section>
 
-          <div class="carousel-window">
-            <div class="carousel-track">
-              <figure class="carousel-slide is-active">
-                <video controls playsinline preload="metadata">
-                  <source src="./static/video/realworld/0001.mp4" type="video/mp4">
-                  Your browser does not support the video tag.
-                </video>
-                <figcaption>Place cup on plate</figcaption>
+    <section id="results" class="section-shell content-shell content-section">
+      <div class="section-header section-header-centered">
+        <h2 class="section-title-simple">Qualitative Results</h2>
+      </div>
+      <div class="body-card prose-card">
+        <p>
+          Samples come from five datasets &mdash; two real-robot settings (a tabletop platform and AgiBot) and
+          three simulators (RoboTwin, ManiSkill, MetaWorld) &mdash; grouped below into real-world and simulation.
+          Use the arrows, the dots, the arrow keys, or a horizontal swipe to move between samples; each slide
+          names its dataset under the caption. A slide is one sample laid out left to right, and the labels
+          under the video name what each panel is.
+        </p>
+      </div>
+
+      <!-- BEGIN:CASES -->
+      <article id="object-flow" class="body-card subsection-card">
+        <h3>3D Object Flow</h3>
+        <p class="subsection-lede">Each slide is one sample. The first column is the real video; the other two draw the full trajectories on the frozen first frame, coloured by time, so the whole motion is visible at once instead of scrolling past. Ground truth and prediction share one colour map, so a good prediction reproduces both the shape of the bundle and the timing along it.</p>
+        <div class="source-group">
+          <div class="source-head">
+            <h4>Real-world</h4>
+            <span class="source-count">Tabletop, AgiBot &middot;
+              17 samples</span>
+          </div>
+          <div class="strip-carousel" data-carousel aria-roledescription="carousel"
+            aria-label="Real-world &ndash; 3D Object Flow">
+            <div class="carousel-stage">
+              <div class="carousel-window">
+                <div class="carousel-track">
+              <figure class="carousel-slide" role="group" style="--strip-ar: 5.3333"
+                aria-roledescription="slide" aria-label="1 of 17: Tabletop &ndash; Throw away the trash">
+                <video controls playsinline muted loop preload="metadata"
+                  data-src="./static/video/cases/demo5/throw_away_trash_tracks_static.mp4"></video>
+                <ul class="strip-cols" data-cols="3" aria-hidden="true">
+                  <li>Input video</li>
+                  <li>GT object flow</li>
+                  <li>Predicted object flow</li>
+                </ul>
+                <figcaption>Throw away the trash<span class="strip-meta">Tabletop</span></figcaption>
               </figure>
-              <figure class="carousel-slide">
-                <video controls playsinline preload="metadata">
-                  <source src="./static/video/realworld/0002.mp4" type="video/mp4">
-                  Your browser does not support the video tag.
-                </video>
-                <figcaption>Place carrot in basket</figcaption>
+              <figure class="carousel-slide" role="group" style="--strip-ar: 5.3333"
+                aria-roledescription="slide" aria-label="2 of 17: Tabletop &ndash; Close the drawer">
+                <video controls playsinline muted loop preload="metadata"
+                  data-src="./static/video/cases/demo5/close_drawer_tracks_static.mp4"></video>
+                <ul class="strip-cols" data-cols="3" aria-hidden="true">
+                  <li>Input video</li>
+                  <li>GT object flow</li>
+                  <li>Predicted object flow</li>
+                </ul>
+                <figcaption>Close the drawer<span class="strip-meta">Tabletop</span></figcaption>
               </figure>
-              <figure class="carousel-slide">
-                <video controls playsinline preload="metadata">
-                  <source src="./static/video/realworld/0003.mp4" type="video/mp4">
-                  Your browser does not support the video tag.
-                </video>
-                <figcaption>Push block to pile</figcaption>
+              <figure class="carousel-slide" role="group" style="--strip-ar: 5.3333"
+                aria-roledescription="slide" aria-label="3 of 17: Tabletop &ndash; Close the washing machine">
+                <video controls playsinline muted loop preload="metadata"
+                  data-src="./static/video/cases/demo5/close_washing_machine_tracks_static.mp4"></video>
+                <ul class="strip-cols" data-cols="3" aria-hidden="true">
+                  <li>Input video</li>
+                  <li>GT object flow</li>
+                  <li>Predicted object flow</li>
+                </ul>
+                <figcaption>Close the washing machine<span class="strip-meta">Tabletop</span></figcaption>
               </figure>
-              <figure class="carousel-slide">
-                <video controls playsinline preload="metadata">
-                  <source src="./static/video/realworld/0004.mp4" type="video/mp4">
-                  Your browser does not support the video tag.
-                </video>
-                <figcaption>Stack bowls</figcaption>
+              <figure class="carousel-slide" role="group" style="--strip-ar: 5.3333"
+                aria-roledescription="slide" aria-label="4 of 17: Tabletop &ndash; Take the shoes out">
+                <video controls playsinline muted loop preload="metadata"
+                  data-src="./static/video/cases/demo5/take_out_shoes_tracks_static.mp4"></video>
+                <ul class="strip-cols" data-cols="3" aria-hidden="true">
+                  <li>Input video</li>
+                  <li>GT object flow</li>
+                  <li>Predicted object flow</li>
+                </ul>
+                <figcaption>Take the shoes out<span class="strip-meta">Tabletop</span></figcaption>
               </figure>
-              <figure class="carousel-slide">
-                <video controls playsinline preload="metadata">
-                  <source src="./static/video/realworld/0005.mp4" type="video/mp4">
-                  Your browser does not support the video tag.
-                </video>
-                <figcaption>Take carrot and banana out of basket</figcaption>
+              <figure class="carousel-slide" role="group" style="--strip-ar: 5.3333"
+                aria-roledescription="slide" aria-label="5 of 17: Tabletop &ndash; Put the bear inside the red circle">
+                <video controls playsinline muted loop preload="metadata"
+                  data-src="./static/video/cases/demo5/put_bear_in_red_circle_tracks_static.mp4"></video>
+                <ul class="strip-cols" data-cols="3" aria-hidden="true">
+                  <li>Input video</li>
+                  <li>GT object flow</li>
+                  <li>Predicted object flow</li>
+                </ul>
+                <figcaption>Put the bear inside the red circle<span class="strip-meta">Tabletop</span></figcaption>
               </figure>
+              <figure class="carousel-slide" role="group" style="--strip-ar: 5.3333"
+                aria-roledescription="slide" aria-label="6 of 17: Tabletop &ndash; Put the corn into the basket">
+                <video controls playsinline muted loop preload="metadata"
+                  data-src="./static/video/cases/demo5/put_corn_in_basket_tracks_static.mp4"></video>
+                <ul class="strip-cols" data-cols="3" aria-hidden="true">
+                  <li>Input video</li>
+                  <li>GT object flow</li>
+                  <li>Predicted object flow</li>
+                </ul>
+                <figcaption>Put the corn into the basket<span class="strip-meta">Tabletop</span></figcaption>
+              </figure>
+              <figure class="carousel-slide" role="group" style="--strip-ar: 5.3333"
+                aria-roledescription="slide" aria-label="7 of 17: Tabletop &ndash; Put the tissue into the drawer">
+                <video controls playsinline muted loop preload="metadata"
+                  data-src="./static/video/cases/demo5/put_tissue_in_drawer_tracks_static.mp4"></video>
+                <ul class="strip-cols" data-cols="3" aria-hidden="true">
+                  <li>Input video</li>
+                  <li>GT object flow</li>
+                  <li>Predicted object flow</li>
+                </ul>
+                <figcaption>Put the tissue into the drawer<span class="strip-meta">Tabletop</span></figcaption>
+              </figure>
+              <figure class="carousel-slide" role="group" style="--strip-ar: 5.3333"
+                aria-roledescription="slide" aria-label="8 of 17: Tabletop &ndash; Put the can on the box">
+                <video controls playsinline muted loop preload="metadata"
+                  data-src="./static/video/cases/demo5/put_can_on_box_tracks_static.mp4"></video>
+                <ul class="strip-cols" data-cols="3" aria-hidden="true">
+                  <li>Input video</li>
+                  <li>GT object flow</li>
+                  <li>Predicted object flow</li>
+                </ul>
+                <figcaption>Put the can on the box<span class="strip-meta">Tabletop</span></figcaption>
+              </figure>
+              <figure class="carousel-slide" role="group" style="--strip-ar: 5.3333"
+                aria-roledescription="slide" aria-label="9 of 17: Tabletop &ndash; Open the drawer">
+                <video controls playsinline muted loop preload="metadata"
+                  data-src="./static/video/cases/demo5/open_drawer_tracks_static.mp4"></video>
+                <ul class="strip-cols" data-cols="3" aria-hidden="true">
+                  <li>Input video</li>
+                  <li>GT object flow</li>
+                  <li>Predicted object flow</li>
+                </ul>
+                <figcaption>Open the drawer<span class="strip-meta">Tabletop</span></figcaption>
+              </figure>
+              <figure class="carousel-slide" role="group" style="--strip-ar: 5.3333"
+                aria-roledescription="slide" aria-label="10 of 17: Tabletop &ndash; Move the book">
+                <video controls playsinline muted loop preload="metadata"
+                  data-src="./static/video/cases/demo5/move_book_tracks_static.mp4"></video>
+                <ul class="strip-cols" data-cols="3" aria-hidden="true">
+                  <li>Input video</li>
+                  <li>GT object flow</li>
+                  <li>Predicted object flow</li>
+                </ul>
+                <figcaption>Move the book<span class="strip-meta">Tabletop</span></figcaption>
+              </figure>
+              <figure class="carousel-slide" role="group" style="--strip-ar: 5.3333"
+                aria-roledescription="slide" aria-label="11 of 17: Tabletop &ndash; Move the spoon">
+                <video controls playsinline muted loop preload="metadata"
+                  data-src="./static/video/cases/demo5/move_spoon_tracks_static.mp4"></video>
+                <ul class="strip-cols" data-cols="3" aria-hidden="true">
+                  <li>Input video</li>
+                  <li>GT object flow</li>
+                  <li>Predicted object flow</li>
+                </ul>
+                <figcaption>Move the spoon<span class="strip-meta">Tabletop</span></figcaption>
+              </figure>
+              <figure class="carousel-slide" role="group" style="--strip-ar: 5.3333"
+                aria-roledescription="slide" aria-label="12 of 17: Tabletop &ndash; Move the hairpin">
+                <video controls playsinline muted loop preload="metadata"
+                  data-src="./static/video/cases/demo5/move_hairpin_tracks_static.mp4"></video>
+                <ul class="strip-cols" data-cols="3" aria-hidden="true">
+                  <li>Input video</li>
+                  <li>GT object flow</li>
+                  <li>Predicted object flow</li>
+                </ul>
+                <figcaption>Move the hairpin<span class="strip-meta">Tabletop</span></figcaption>
+              </figure>
+              <figure class="carousel-slide" role="group" style="--strip-ar: 5.3333"
+                aria-roledescription="slide" aria-label="13 of 17: Tabletop &ndash; Move the notebook">
+                <video controls playsinline muted loop preload="metadata"
+                  data-src="./static/video/cases/demo5/move_notebook_tracks_static.mp4"></video>
+                <ul class="strip-cols" data-cols="3" aria-hidden="true">
+                  <li>Input video</li>
+                  <li>GT object flow</li>
+                  <li>Predicted object flow</li>
+                </ul>
+                <figcaption>Move the notebook<span class="strip-meta">Tabletop</span></figcaption>
+              </figure>
+              <figure class="carousel-slide" role="group" style="--strip-ar: 5.3333"
+                aria-roledescription="slide" aria-label="14 of 17: Tabletop &ndash; Move the box">
+                <video controls playsinline muted loop preload="metadata"
+                  data-src="./static/video/cases/demo5/move_box_tracks_static.mp4"></video>
+                <ul class="strip-cols" data-cols="3" aria-hidden="true">
+                  <li>Input video</li>
+                  <li>GT object flow</li>
+                  <li>Predicted object flow</li>
+                </ul>
+                <figcaption>Move the box<span class="strip-meta">Tabletop</span></figcaption>
+              </figure>
+              <figure class="carousel-slide" role="group" style="--strip-ar: 5.3333"
+                aria-roledescription="slide" aria-label="15 of 17: Tabletop &ndash; Move the remote control">
+                <video controls playsinline muted loop preload="metadata"
+                  data-src="./static/video/cases/demo5/move_remote_tracks_static.mp4"></video>
+                <ul class="strip-cols" data-cols="3" aria-hidden="true">
+                  <li>Input video</li>
+                  <li>GT object flow</li>
+                  <li>Predicted object flow</li>
+                </ul>
+                <figcaption>Move the remote control<span class="strip-meta">Tabletop</span></figcaption>
+              </figure>
+              <figure class="carousel-slide" role="group" style="--strip-ar: 4.0"
+                aria-roledescription="slide" aria-label="16 of 17: AgiBot &ndash; Put the tissue into the drawer">
+                <video controls playsinline muted loop preload="metadata"
+                  data-src="./static/video/cases/agibot/agibot_put_tissue_in_drawer_tracks_static.mp4"></video>
+                <ul class="strip-cols" data-cols="3" aria-hidden="true">
+                  <li>Input video</li>
+                  <li>GT object flow</li>
+                  <li>Predicted object flow</li>
+                </ul>
+                <figcaption>Put the tissue into the drawer<span class="strip-meta">AgiBot</span></figcaption>
+              </figure>
+              <figure class="carousel-slide" role="group" style="--strip-ar: 4.0"
+                aria-roledescription="slide" aria-label="17 of 17: AgiBot &ndash; Put the plate into the microwave">
+                <video controls playsinline muted loop preload="metadata"
+                  data-src="./static/video/cases/agibot/put_plate_in_microwave_tracks_static.mp4"></video>
+                <ul class="strip-cols" data-cols="3" aria-hidden="true">
+                  <li>Input video</li>
+                  <li>GT object flow</li>
+                  <li>Predicted object flow</li>
+                </ul>
+                <figcaption>Put the plate into the microwave<span class="strip-meta">AgiBot</span></figcaption>
+              </figure>
+                </div>
+              </div>
             </div>
+          <button class="carousel-arrow carousel-prev" type="button"
+            aria-label="Previous sample">&#10094;</button>
+          <button class="carousel-arrow carousel-next" type="button"
+            aria-label="Next sample">&#10095;</button>
+          <div class="carousel-footer">
+            <div class="carousel-dots" role="tablist" aria-label="Choose a sample">
+            <button class="carousel-dot is-active" type="button" role="tab" aria-selected="true" aria-label="Tabletop &ndash; Throw away the trash"></button>
+            <button class="carousel-dot" type="button" role="tab" aria-selected="false" aria-label="Tabletop &ndash; Close the drawer"></button>
+            <button class="carousel-dot" type="button" role="tab" aria-selected="false" aria-label="Tabletop &ndash; Close the washing machine"></button>
+            <button class="carousel-dot" type="button" role="tab" aria-selected="false" aria-label="Tabletop &ndash; Take the shoes out"></button>
+            <button class="carousel-dot" type="button" role="tab" aria-selected="false" aria-label="Tabletop &ndash; Put the bear inside the red circle"></button>
+            <button class="carousel-dot" type="button" role="tab" aria-selected="false" aria-label="Tabletop &ndash; Put the corn into the basket"></button>
+            <button class="carousel-dot" type="button" role="tab" aria-selected="false" aria-label="Tabletop &ndash; Put the tissue into the drawer"></button>
+            <button class="carousel-dot" type="button" role="tab" aria-selected="false" aria-label="Tabletop &ndash; Put the can on the box"></button>
+            <button class="carousel-dot" type="button" role="tab" aria-selected="false" aria-label="Tabletop &ndash; Open the drawer"></button>
+            <button class="carousel-dot" type="button" role="tab" aria-selected="false" aria-label="Tabletop &ndash; Move the book"></button>
+            <button class="carousel-dot" type="button" role="tab" aria-selected="false" aria-label="Tabletop &ndash; Move the spoon"></button>
+            <button class="carousel-dot" type="button" role="tab" aria-selected="false" aria-label="Tabletop &ndash; Move the hairpin"></button>
+            <button class="carousel-dot" type="button" role="tab" aria-selected="false" aria-label="Tabletop &ndash; Move the notebook"></button>
+            <button class="carousel-dot" type="button" role="tab" aria-selected="false" aria-label="Tabletop &ndash; Move the box"></button>
+            <button class="carousel-dot" type="button" role="tab" aria-selected="false" aria-label="Tabletop &ndash; Move the remote control"></button>
+            <button class="carousel-dot" type="button" role="tab" aria-selected="false" aria-label="AgiBot &ndash; Put the tissue into the drawer"></button>
+            <button class="carousel-dot" type="button" role="tab" aria-selected="false" aria-label="AgiBot &ndash; Put the plate into the microwave"></button>
+            </div>
+            <span class="carousel-counter" aria-live="polite">1 / 17</span>
           </div>
-
-          <button class="carousel-arrow carousel-next" type="button" aria-label="Next video">&#10095;</button>
+          </div>
         </div>
-
-        <div class="carousel-dots" aria-label="Real-world video navigation">
-          <button class="carousel-dot is-active" type="button" aria-label="Show video 1"></button>
-          <button class="carousel-dot" type="button" aria-label="Show video 2"></button>
-          <button class="carousel-dot" type="button" aria-label="Show video 3"></button>
-          <button class="carousel-dot" type="button" aria-label="Show video 4"></button>
-          <button class="carousel-dot" type="button" aria-label="Show video 5"></button>
+        <div class="source-group">
+          <div class="source-head">
+            <h4>Simulation</h4>
+            <span class="source-count">RoboTwin, ManiSkill, MetaWorld &middot;
+              10 samples</span>
+          </div>
+          <div class="strip-carousel" data-carousel aria-roledescription="carousel"
+            aria-label="Simulation &ndash; 3D Object Flow">
+            <div class="carousel-stage">
+              <div class="carousel-window">
+                <div class="carousel-track">
+              <figure class="carousel-slide" role="group" style="--strip-ar: 5.2"
+                aria-roledescription="slide" aria-label="1 of 10: RoboTwin &ndash; Throw away the trash">
+                <video controls playsinline muted loop preload="metadata"
+                  data-src="./static/video/cases/robotwin/robotwin_throw_away_trash_tracks_static.mp4"></video>
+                <ul class="strip-cols" data-cols="3" aria-hidden="true">
+                  <li>Input video</li>
+                  <li>GT object flow</li>
+                  <li>Predicted object flow</li>
+                </ul>
+                <figcaption>Throw away the trash<span class="strip-meta">RoboTwin</span></figcaption>
+              </figure>
+              <figure class="carousel-slide" role="group" style="--strip-ar: 5.2"
+                aria-roledescription="slide" aria-label="2 of 10: RoboTwin &ndash; Put the cup on the plate">
+                <video controls playsinline muted loop preload="metadata"
+                  data-src="./static/video/cases/robotwin/put_cup_on_plate_tracks_static.mp4"></video>
+                <ul class="strip-cols" data-cols="3" aria-hidden="true">
+                  <li>Input video</li>
+                  <li>GT object flow</li>
+                  <li>Predicted object flow</li>
+                </ul>
+                <figcaption>Put the cup on the plate<span class="strip-meta">RoboTwin</span></figcaption>
+              </figure>
+              <figure class="carousel-slide" role="group" style="--strip-ar: 5.2"
+                aria-roledescription="slide" aria-label="3 of 10: RoboTwin &ndash; Shake the bottle">
+                <video controls playsinline muted loop preload="metadata"
+                  data-src="./static/video/cases/robotwin/shake_bottle_tracks_static.mp4"></video>
+                <ul class="strip-cols" data-cols="3" aria-hidden="true">
+                  <li>Input video</li>
+                  <li>GT object flow</li>
+                  <li>Predicted object flow</li>
+                </ul>
+                <figcaption>Shake the bottle<span class="strip-meta">RoboTwin</span></figcaption>
+              </figure>
+              <figure class="carousel-slide" role="group" style="--strip-ar: 5.2"
+                aria-roledescription="slide" aria-label="4 of 10: RoboTwin &ndash; Rotate the QR-code board">
+                <video controls playsinline muted loop preload="metadata"
+                  data-src="./static/video/cases/robotwin/rotate_qr_board_tracks_static.mp4"></video>
+                <ul class="strip-cols" data-cols="3" aria-hidden="true">
+                  <li>Input video</li>
+                  <li>GT object flow</li>
+                  <li>Predicted object flow</li>
+                </ul>
+                <figcaption>Rotate the QR-code board<span class="strip-meta">RoboTwin</span></figcaption>
+              </figure>
+              <figure class="carousel-slide" role="group" style="--strip-ar: 5.2"
+                aria-roledescription="slide" aria-label="5 of 10: RoboTwin &ndash; Adjust the bottle">
+                <video controls playsinline muted loop preload="metadata"
+                  data-src="./static/video/cases/robotwin/adjust_bottle_tracks_static.mp4"></video>
+                <ul class="strip-cols" data-cols="3" aria-hidden="true">
+                  <li>Input video</li>
+                  <li>GT object flow</li>
+                  <li>Predicted object flow</li>
+                </ul>
+                <figcaption>Adjust the bottle<span class="strip-meta">RoboTwin</span></figcaption>
+              </figure>
+              <figure class="carousel-slide" role="group" style="--strip-ar: 5.2"
+                aria-roledescription="slide" aria-label="6 of 10: ManiSkill &ndash; Plug in the charger">
+                <video controls playsinline muted loop preload="metadata"
+                  data-src="./static/video/cases/maniskill/plug_charger_tracks_static.mp4"></video>
+                <ul class="strip-cols" data-cols="3" aria-hidden="true">
+                  <li>Input video</li>
+                  <li>GT object flow</li>
+                  <li>Predicted object flow</li>
+                </ul>
+                <figcaption>Plug in the charger<span class="strip-meta">ManiSkill</span></figcaption>
+              </figure>
+              <figure class="carousel-slide" role="group" style="--strip-ar: 5.2"
+                aria-roledescription="slide" aria-label="7 of 10: ManiSkill &ndash; Insert the peg">
+                <video controls playsinline muted loop preload="metadata"
+                  data-src="./static/video/cases/maniskill/insert_peg_tracks_static.mp4"></video>
+                <ul class="strip-cols" data-cols="3" aria-hidden="true">
+                  <li>Input video</li>
+                  <li>GT object flow</li>
+                  <li>Predicted object flow</li>
+                </ul>
+                <figcaption>Insert the peg<span class="strip-meta">ManiSkill</span></figcaption>
+              </figure>
+              <figure class="carousel-slide" role="group" style="--strip-ar: 5.2"
+                aria-roledescription="slide" aria-label="8 of 10: MetaWorld &ndash; Open the cabinet door">
+                <video controls playsinline muted loop preload="metadata"
+                  data-src="./static/video/cases/metaworld/open_cabinet_door_tracks_static.mp4"></video>
+                <ul class="strip-cols" data-cols="3" aria-hidden="true">
+                  <li>Input video</li>
+                  <li>GT object flow</li>
+                  <li>Predicted object flow</li>
+                </ul>
+                <figcaption>Open the cabinet door<span class="strip-meta">MetaWorld</span></figcaption>
+              </figure>
+              <figure class="carousel-slide" role="group" style="--strip-ar: 5.2"
+                aria-roledescription="slide" aria-label="9 of 10: MetaWorld &ndash; Rotate the dial">
+                <video controls playsinline muted loop preload="metadata"
+                  data-src="./static/video/cases/metaworld/rotate_dial_tracks_static.mp4"></video>
+                <ul class="strip-cols" data-cols="3" aria-hidden="true">
+                  <li>Input video</li>
+                  <li>GT object flow</li>
+                  <li>Predicted object flow</li>
+                </ul>
+                <figcaption>Rotate the dial<span class="strip-meta">MetaWorld</span></figcaption>
+              </figure>
+              <figure class="carousel-slide" role="group" style="--strip-ar: 5.2"
+                aria-roledescription="slide" aria-label="10 of 10: MetaWorld &ndash; Put on the lid">
+                <video controls playsinline muted loop preload="metadata"
+                  data-src="./static/video/cases/metaworld/put_on_lid_tracks_static.mp4"></video>
+                <ul class="strip-cols" data-cols="3" aria-hidden="true">
+                  <li>Input video</li>
+                  <li>GT object flow</li>
+                  <li>Predicted object flow</li>
+                </ul>
+                <figcaption>Put on the lid<span class="strip-meta">MetaWorld</span></figcaption>
+              </figure>
+                </div>
+              </div>
+            </div>
+          <button class="carousel-arrow carousel-prev" type="button"
+            aria-label="Previous sample">&#10094;</button>
+          <button class="carousel-arrow carousel-next" type="button"
+            aria-label="Next sample">&#10095;</button>
+          <div class="carousel-footer">
+            <div class="carousel-dots" role="tablist" aria-label="Choose a sample">
+            <button class="carousel-dot is-active" type="button" role="tab" aria-selected="true" aria-label="RoboTwin &ndash; Throw away the trash"></button>
+            <button class="carousel-dot" type="button" role="tab" aria-selected="false" aria-label="RoboTwin &ndash; Put the cup on the plate"></button>
+            <button class="carousel-dot" type="button" role="tab" aria-selected="false" aria-label="RoboTwin &ndash; Shake the bottle"></button>
+            <button class="carousel-dot" type="button" role="tab" aria-selected="false" aria-label="RoboTwin &ndash; Rotate the QR-code board"></button>
+            <button class="carousel-dot" type="button" role="tab" aria-selected="false" aria-label="RoboTwin &ndash; Adjust the bottle"></button>
+            <button class="carousel-dot" type="button" role="tab" aria-selected="false" aria-label="ManiSkill &ndash; Plug in the charger"></button>
+            <button class="carousel-dot" type="button" role="tab" aria-selected="false" aria-label="ManiSkill &ndash; Insert the peg"></button>
+            <button class="carousel-dot" type="button" role="tab" aria-selected="false" aria-label="MetaWorld &ndash; Open the cabinet door"></button>
+            <button class="carousel-dot" type="button" role="tab" aria-selected="false" aria-label="MetaWorld &ndash; Rotate the dial"></button>
+            <button class="carousel-dot" type="button" role="tab" aria-selected="false" aria-label="MetaWorld &ndash; Put on the lid"></button>
+            </div>
+            <span class="carousel-counter" aria-live="polite">1 / 10</span>
+          </div>
+          </div>
         </div>
       </article>
 
-      <article id="libero" class="body-card subsection-card">
-        <h3>LIBERO</h3>
-        <div class="libero-grid">
-          <figure class="video-card">
-            <video controls playsinline preload="metadata">
-              <source src="./static/video/libero/goal/put_the_bowl_on_the_plate.mp4" type="video/mp4">
-              Your browser does not support the video tag.
-            </video>
-            <figcaption>put the bowl on the plate</figcaption>
-          </figure>
-          <figure class="video-card">
-            <video controls playsinline preload="metadata">
-              <source src="./static/video/libero/goal/put_the_bowl_on_the_stove.mp4" type="video/mp4">
-              Your browser does not support the video tag.
-            </video>
-            <figcaption>put the bowl on the stove</figcaption>
-          </figure>
-          <figure class="video-card">
-            <video controls playsinline preload="metadata">
-              <source src="./static/video/libero/long/put_the_white_mug_on_the_left_plate_and_put_the_yellow_and_white_mug_on_the_right_plate.mp4" type="video/mp4">
-              Your browser does not support the video tag.
-            </video>
-            <figcaption>put the white mug on the left plate and put the yellow and white mug on the right plate</figcaption>
-          </figure>
-          <figure class="video-card">
-            <video controls playsinline preload="metadata">
-              <source src="./static/video/libero/long/turn_on_the_stove_and_put_the_moka_pot_on_it.mp4" type="video/mp4">
-              Your browser does not support the video tag.
-            </video>
-            <figcaption>turn on the stove and put the moka pot on it</figcaption>
-          </figure>
-          <figure class="video-card">
-            <video controls playsinline preload="metadata">
-              <source src="./static/video/libero/object/pick_up_the_chocolate_pudding_and_place_it_in_the_basket.mp4" type="video/mp4">
-              Your browser does not support the video tag.
-            </video>
-            <figcaption>pick up the chocolate pudding and place it in the basket</figcaption>
-          </figure>
-          <figure class="video-card">
-            <video controls playsinline preload="metadata">
-              <source src="./static/video/libero/object/pick_up_the_orange_juice_and_place_it_in_the_basket.mp4" type="video/mp4">
-              Your browser does not support the video tag.
-            </video>
-            <figcaption>pick up the orange juice and place it in the basket</figcaption>
-          </figure>
-          <figure class="video-card">
-            <video controls playsinline preload="metadata">
-              <source src="./static/video/libero/spatial/pick_up_the_black_bowl_between_the_plate_and_the_ramekin_and_place_it_on_the_plate.mp4" type="video/mp4">
-              Your browser does not support the video tag.
-            </video>
-            <figcaption>pick up the black bowl between the plate and the ramekin and place it on the plate</figcaption>
-          </figure>
-          <figure class="video-card">
-            <video controls playsinline preload="metadata">
-              <source src="./static/video/libero/spatial/pick_up_the_black_bowl_next_to_the_cookie_box_and_place_it_on_the_plate.mp4" type="video/mp4">
-              Your browser does not support the video tag.
-            </video>
-            <figcaption>pick up the black bowl next to the cookie box and place it on the plate</figcaption>
-          </figure>
+      <article id="dino-prediction" class="body-card subsection-card">
+        <h3>Future DINO Representation</h3>
+        <p class="subsection-lede">The same samples in representation space. The ground-truth and predicted DINO features share a single PCA basis fitted over all of their patches, so colours are directly comparable between the two columns: matching colours mean matching representations, and the layout of the colour regions reflects how the model places objects and structure in the predicted future.</p>
+        <div class="source-group">
+          <div class="source-head">
+            <h4>Real-world</h4>
+            <span class="source-count">Tabletop, AgiBot &middot;
+              17 samples</span>
+          </div>
+          <div class="strip-carousel" data-carousel aria-roledescription="carousel"
+            aria-label="Real-world &ndash; Future DINO Representation">
+            <div class="carousel-stage">
+              <div class="carousel-window">
+                <div class="carousel-track">
+              <figure class="carousel-slide" role="group" style="--strip-ar: 5.3333"
+                aria-roledescription="slide" aria-label="1 of 17: Tabletop &ndash; Throw away the trash">
+                <video controls playsinline muted loop preload="metadata"
+                  data-src="./static/video/cases/demo5/throw_away_trash_pca3col.mp4"></video>
+                <ul class="strip-cols" data-cols="3" aria-hidden="true">
+                  <li>Input RGB</li>
+                  <li>GT DINO</li>
+                  <li>Predicted DINO</li>
+                </ul>
+                <figcaption>Throw away the trash<span class="strip-meta">Tabletop</span></figcaption>
+              </figure>
+              <figure class="carousel-slide" role="group" style="--strip-ar: 5.3333"
+                aria-roledescription="slide" aria-label="2 of 17: Tabletop &ndash; Close the drawer">
+                <video controls playsinline muted loop preload="metadata"
+                  data-src="./static/video/cases/demo5/close_drawer_pca3col.mp4"></video>
+                <ul class="strip-cols" data-cols="3" aria-hidden="true">
+                  <li>Input RGB</li>
+                  <li>GT DINO</li>
+                  <li>Predicted DINO</li>
+                </ul>
+                <figcaption>Close the drawer<span class="strip-meta">Tabletop</span></figcaption>
+              </figure>
+              <figure class="carousel-slide" role="group" style="--strip-ar: 5.3333"
+                aria-roledescription="slide" aria-label="3 of 17: Tabletop &ndash; Close the washing machine">
+                <video controls playsinline muted loop preload="metadata"
+                  data-src="./static/video/cases/demo5/close_washing_machine_pca3col.mp4"></video>
+                <ul class="strip-cols" data-cols="3" aria-hidden="true">
+                  <li>Input RGB</li>
+                  <li>GT DINO</li>
+                  <li>Predicted DINO</li>
+                </ul>
+                <figcaption>Close the washing machine<span class="strip-meta">Tabletop</span></figcaption>
+              </figure>
+              <figure class="carousel-slide" role="group" style="--strip-ar: 5.3333"
+                aria-roledescription="slide" aria-label="4 of 17: Tabletop &ndash; Take the shoes out">
+                <video controls playsinline muted loop preload="metadata"
+                  data-src="./static/video/cases/demo5/take_out_shoes_pca3col.mp4"></video>
+                <ul class="strip-cols" data-cols="3" aria-hidden="true">
+                  <li>Input RGB</li>
+                  <li>GT DINO</li>
+                  <li>Predicted DINO</li>
+                </ul>
+                <figcaption>Take the shoes out<span class="strip-meta">Tabletop</span></figcaption>
+              </figure>
+              <figure class="carousel-slide" role="group" style="--strip-ar: 5.3333"
+                aria-roledescription="slide" aria-label="5 of 17: Tabletop &ndash; Put the bear inside the red circle">
+                <video controls playsinline muted loop preload="metadata"
+                  data-src="./static/video/cases/demo5/put_bear_in_red_circle_pca3col.mp4"></video>
+                <ul class="strip-cols" data-cols="3" aria-hidden="true">
+                  <li>Input RGB</li>
+                  <li>GT DINO</li>
+                  <li>Predicted DINO</li>
+                </ul>
+                <figcaption>Put the bear inside the red circle<span class="strip-meta">Tabletop</span></figcaption>
+              </figure>
+              <figure class="carousel-slide" role="group" style="--strip-ar: 5.3333"
+                aria-roledescription="slide" aria-label="6 of 17: Tabletop &ndash; Put the corn into the basket">
+                <video controls playsinline muted loop preload="metadata"
+                  data-src="./static/video/cases/demo5/put_corn_in_basket_pca3col.mp4"></video>
+                <ul class="strip-cols" data-cols="3" aria-hidden="true">
+                  <li>Input RGB</li>
+                  <li>GT DINO</li>
+                  <li>Predicted DINO</li>
+                </ul>
+                <figcaption>Put the corn into the basket<span class="strip-meta">Tabletop</span></figcaption>
+              </figure>
+              <figure class="carousel-slide" role="group" style="--strip-ar: 5.3333"
+                aria-roledescription="slide" aria-label="7 of 17: Tabletop &ndash; Put the tissue into the drawer">
+                <video controls playsinline muted loop preload="metadata"
+                  data-src="./static/video/cases/demo5/put_tissue_in_drawer_pca3col.mp4"></video>
+                <ul class="strip-cols" data-cols="3" aria-hidden="true">
+                  <li>Input RGB</li>
+                  <li>GT DINO</li>
+                  <li>Predicted DINO</li>
+                </ul>
+                <figcaption>Put the tissue into the drawer<span class="strip-meta">Tabletop</span></figcaption>
+              </figure>
+              <figure class="carousel-slide" role="group" style="--strip-ar: 5.3333"
+                aria-roledescription="slide" aria-label="8 of 17: Tabletop &ndash; Put the can on the box">
+                <video controls playsinline muted loop preload="metadata"
+                  data-src="./static/video/cases/demo5/put_can_on_box_pca3col.mp4"></video>
+                <ul class="strip-cols" data-cols="3" aria-hidden="true">
+                  <li>Input RGB</li>
+                  <li>GT DINO</li>
+                  <li>Predicted DINO</li>
+                </ul>
+                <figcaption>Put the can on the box<span class="strip-meta">Tabletop</span></figcaption>
+              </figure>
+              <figure class="carousel-slide" role="group" style="--strip-ar: 5.3333"
+                aria-roledescription="slide" aria-label="9 of 17: Tabletop &ndash; Open the drawer">
+                <video controls playsinline muted loop preload="metadata"
+                  data-src="./static/video/cases/demo5/open_drawer_pca3col.mp4"></video>
+                <ul class="strip-cols" data-cols="3" aria-hidden="true">
+                  <li>Input RGB</li>
+                  <li>GT DINO</li>
+                  <li>Predicted DINO</li>
+                </ul>
+                <figcaption>Open the drawer<span class="strip-meta">Tabletop</span></figcaption>
+              </figure>
+              <figure class="carousel-slide" role="group" style="--strip-ar: 5.3333"
+                aria-roledescription="slide" aria-label="10 of 17: Tabletop &ndash; Move the book">
+                <video controls playsinline muted loop preload="metadata"
+                  data-src="./static/video/cases/demo5/move_book_pca3col.mp4"></video>
+                <ul class="strip-cols" data-cols="3" aria-hidden="true">
+                  <li>Input RGB</li>
+                  <li>GT DINO</li>
+                  <li>Predicted DINO</li>
+                </ul>
+                <figcaption>Move the book<span class="strip-meta">Tabletop</span></figcaption>
+              </figure>
+              <figure class="carousel-slide" role="group" style="--strip-ar: 5.3333"
+                aria-roledescription="slide" aria-label="11 of 17: Tabletop &ndash; Move the spoon">
+                <video controls playsinline muted loop preload="metadata"
+                  data-src="./static/video/cases/demo5/move_spoon_pca3col.mp4"></video>
+                <ul class="strip-cols" data-cols="3" aria-hidden="true">
+                  <li>Input RGB</li>
+                  <li>GT DINO</li>
+                  <li>Predicted DINO</li>
+                </ul>
+                <figcaption>Move the spoon<span class="strip-meta">Tabletop</span></figcaption>
+              </figure>
+              <figure class="carousel-slide" role="group" style="--strip-ar: 5.3333"
+                aria-roledescription="slide" aria-label="12 of 17: Tabletop &ndash; Move the hairpin">
+                <video controls playsinline muted loop preload="metadata"
+                  data-src="./static/video/cases/demo5/move_hairpin_pca3col.mp4"></video>
+                <ul class="strip-cols" data-cols="3" aria-hidden="true">
+                  <li>Input RGB</li>
+                  <li>GT DINO</li>
+                  <li>Predicted DINO</li>
+                </ul>
+                <figcaption>Move the hairpin<span class="strip-meta">Tabletop</span></figcaption>
+              </figure>
+              <figure class="carousel-slide" role="group" style="--strip-ar: 5.3333"
+                aria-roledescription="slide" aria-label="13 of 17: Tabletop &ndash; Move the notebook">
+                <video controls playsinline muted loop preload="metadata"
+                  data-src="./static/video/cases/demo5/move_notebook_pca3col.mp4"></video>
+                <ul class="strip-cols" data-cols="3" aria-hidden="true">
+                  <li>Input RGB</li>
+                  <li>GT DINO</li>
+                  <li>Predicted DINO</li>
+                </ul>
+                <figcaption>Move the notebook<span class="strip-meta">Tabletop</span></figcaption>
+              </figure>
+              <figure class="carousel-slide" role="group" style="--strip-ar: 5.3333"
+                aria-roledescription="slide" aria-label="14 of 17: Tabletop &ndash; Move the box">
+                <video controls playsinline muted loop preload="metadata"
+                  data-src="./static/video/cases/demo5/move_box_pca3col.mp4"></video>
+                <ul class="strip-cols" data-cols="3" aria-hidden="true">
+                  <li>Input RGB</li>
+                  <li>GT DINO</li>
+                  <li>Predicted DINO</li>
+                </ul>
+                <figcaption>Move the box<span class="strip-meta">Tabletop</span></figcaption>
+              </figure>
+              <figure class="carousel-slide" role="group" style="--strip-ar: 5.3333"
+                aria-roledescription="slide" aria-label="15 of 17: Tabletop &ndash; Move the remote control">
+                <video controls playsinline muted loop preload="metadata"
+                  data-src="./static/video/cases/demo5/move_remote_pca3col.mp4"></video>
+                <ul class="strip-cols" data-cols="3" aria-hidden="true">
+                  <li>Input RGB</li>
+                  <li>GT DINO</li>
+                  <li>Predicted DINO</li>
+                </ul>
+                <figcaption>Move the remote control<span class="strip-meta">Tabletop</span></figcaption>
+              </figure>
+              <figure class="carousel-slide" role="group" style="--strip-ar: 4.0"
+                aria-roledescription="slide" aria-label="16 of 17: AgiBot &ndash; Put the tissue into the drawer">
+                <video controls playsinline muted loop preload="metadata"
+                  data-src="./static/video/cases/agibot/agibot_put_tissue_in_drawer_pca3col.mp4"></video>
+                <ul class="strip-cols" data-cols="3" aria-hidden="true">
+                  <li>Input RGB</li>
+                  <li>GT DINO</li>
+                  <li>Predicted DINO</li>
+                </ul>
+                <figcaption>Put the tissue into the drawer<span class="strip-meta">AgiBot</span></figcaption>
+              </figure>
+              <figure class="carousel-slide" role="group" style="--strip-ar: 4.0"
+                aria-roledescription="slide" aria-label="17 of 17: AgiBot &ndash; Put the plate into the microwave">
+                <video controls playsinline muted loop preload="metadata"
+                  data-src="./static/video/cases/agibot/put_plate_in_microwave_pca3col.mp4"></video>
+                <ul class="strip-cols" data-cols="3" aria-hidden="true">
+                  <li>Input RGB</li>
+                  <li>GT DINO</li>
+                  <li>Predicted DINO</li>
+                </ul>
+                <figcaption>Put the plate into the microwave<span class="strip-meta">AgiBot</span></figcaption>
+              </figure>
+                </div>
+              </div>
+            </div>
+          <button class="carousel-arrow carousel-prev" type="button"
+            aria-label="Previous sample">&#10094;</button>
+          <button class="carousel-arrow carousel-next" type="button"
+            aria-label="Next sample">&#10095;</button>
+          <div class="carousel-footer">
+            <div class="carousel-dots" role="tablist" aria-label="Choose a sample">
+            <button class="carousel-dot is-active" type="button" role="tab" aria-selected="true" aria-label="Tabletop &ndash; Throw away the trash"></button>
+            <button class="carousel-dot" type="button" role="tab" aria-selected="false" aria-label="Tabletop &ndash; Close the drawer"></button>
+            <button class="carousel-dot" type="button" role="tab" aria-selected="false" aria-label="Tabletop &ndash; Close the washing machine"></button>
+            <button class="carousel-dot" type="button" role="tab" aria-selected="false" aria-label="Tabletop &ndash; Take the shoes out"></button>
+            <button class="carousel-dot" type="button" role="tab" aria-selected="false" aria-label="Tabletop &ndash; Put the bear inside the red circle"></button>
+            <button class="carousel-dot" type="button" role="tab" aria-selected="false" aria-label="Tabletop &ndash; Put the corn into the basket"></button>
+            <button class="carousel-dot" type="button" role="tab" aria-selected="false" aria-label="Tabletop &ndash; Put the tissue into the drawer"></button>
+            <button class="carousel-dot" type="button" role="tab" aria-selected="false" aria-label="Tabletop &ndash; Put the can on the box"></button>
+            <button class="carousel-dot" type="button" role="tab" aria-selected="false" aria-label="Tabletop &ndash; Open the drawer"></button>
+            <button class="carousel-dot" type="button" role="tab" aria-selected="false" aria-label="Tabletop &ndash; Move the book"></button>
+            <button class="carousel-dot" type="button" role="tab" aria-selected="false" aria-label="Tabletop &ndash; Move the spoon"></button>
+            <button class="carousel-dot" type="button" role="tab" aria-selected="false" aria-label="Tabletop &ndash; Move the hairpin"></button>
+            <button class="carousel-dot" type="button" role="tab" aria-selected="false" aria-label="Tabletop &ndash; Move the notebook"></button>
+            <button class="carousel-dot" type="button" role="tab" aria-selected="false" aria-label="Tabletop &ndash; Move the box"></button>
+            <button class="carousel-dot" type="button" role="tab" aria-selected="false" aria-label="Tabletop &ndash; Move the remote control"></button>
+            <button class="carousel-dot" type="button" role="tab" aria-selected="false" aria-label="AgiBot &ndash; Put the tissue into the drawer"></button>
+            <button class="carousel-dot" type="button" role="tab" aria-selected="false" aria-label="AgiBot &ndash; Put the plate into the microwave"></button>
+            </div>
+            <span class="carousel-counter" aria-live="polite">1 / 17</span>
+          </div>
+          </div>
+        </div>
+        <div class="source-group">
+          <div class="source-head">
+            <h4>Simulation</h4>
+            <span class="source-count">RoboTwin, ManiSkill, MetaWorld &middot;
+              10 samples</span>
+          </div>
+          <div class="strip-carousel" data-carousel aria-roledescription="carousel"
+            aria-label="Simulation &ndash; Future DINO Representation">
+            <div class="carousel-stage">
+              <div class="carousel-window">
+                <div class="carousel-track">
+              <figure class="carousel-slide" role="group" style="--strip-ar: 5.2"
+                aria-roledescription="slide" aria-label="1 of 10: RoboTwin &ndash; Throw away the trash">
+                <video controls playsinline muted loop preload="metadata"
+                  data-src="./static/video/cases/robotwin/robotwin_throw_away_trash_pca3col.mp4"></video>
+                <ul class="strip-cols" data-cols="3" aria-hidden="true">
+                  <li>Input RGB</li>
+                  <li>GT DINO</li>
+                  <li>Predicted DINO</li>
+                </ul>
+                <figcaption>Throw away the trash<span class="strip-meta">RoboTwin</span></figcaption>
+              </figure>
+              <figure class="carousel-slide" role="group" style="--strip-ar: 5.2"
+                aria-roledescription="slide" aria-label="2 of 10: RoboTwin &ndash; Put the cup on the plate">
+                <video controls playsinline muted loop preload="metadata"
+                  data-src="./static/video/cases/robotwin/put_cup_on_plate_pca3col.mp4"></video>
+                <ul class="strip-cols" data-cols="3" aria-hidden="true">
+                  <li>Input RGB</li>
+                  <li>GT DINO</li>
+                  <li>Predicted DINO</li>
+                </ul>
+                <figcaption>Put the cup on the plate<span class="strip-meta">RoboTwin</span></figcaption>
+              </figure>
+              <figure class="carousel-slide" role="group" style="--strip-ar: 5.2"
+                aria-roledescription="slide" aria-label="3 of 10: RoboTwin &ndash; Shake the bottle">
+                <video controls playsinline muted loop preload="metadata"
+                  data-src="./static/video/cases/robotwin/shake_bottle_pca3col.mp4"></video>
+                <ul class="strip-cols" data-cols="3" aria-hidden="true">
+                  <li>Input RGB</li>
+                  <li>GT DINO</li>
+                  <li>Predicted DINO</li>
+                </ul>
+                <figcaption>Shake the bottle<span class="strip-meta">RoboTwin</span></figcaption>
+              </figure>
+              <figure class="carousel-slide" role="group" style="--strip-ar: 5.2"
+                aria-roledescription="slide" aria-label="4 of 10: RoboTwin &ndash; Rotate the QR-code board">
+                <video controls playsinline muted loop preload="metadata"
+                  data-src="./static/video/cases/robotwin/rotate_qr_board_pca3col.mp4"></video>
+                <ul class="strip-cols" data-cols="3" aria-hidden="true">
+                  <li>Input RGB</li>
+                  <li>GT DINO</li>
+                  <li>Predicted DINO</li>
+                </ul>
+                <figcaption>Rotate the QR-code board<span class="strip-meta">RoboTwin</span></figcaption>
+              </figure>
+              <figure class="carousel-slide" role="group" style="--strip-ar: 5.2"
+                aria-roledescription="slide" aria-label="5 of 10: RoboTwin &ndash; Adjust the bottle">
+                <video controls playsinline muted loop preload="metadata"
+                  data-src="./static/video/cases/robotwin/adjust_bottle_pca3col.mp4"></video>
+                <ul class="strip-cols" data-cols="3" aria-hidden="true">
+                  <li>Input RGB</li>
+                  <li>GT DINO</li>
+                  <li>Predicted DINO</li>
+                </ul>
+                <figcaption>Adjust the bottle<span class="strip-meta">RoboTwin</span></figcaption>
+              </figure>
+              <figure class="carousel-slide" role="group" style="--strip-ar: 5.2"
+                aria-roledescription="slide" aria-label="6 of 10: ManiSkill &ndash; Plug in the charger">
+                <video controls playsinline muted loop preload="metadata"
+                  data-src="./static/video/cases/maniskill/plug_charger_pca3col.mp4"></video>
+                <ul class="strip-cols" data-cols="3" aria-hidden="true">
+                  <li>Input RGB</li>
+                  <li>GT DINO</li>
+                  <li>Predicted DINO</li>
+                </ul>
+                <figcaption>Plug in the charger<span class="strip-meta">ManiSkill</span></figcaption>
+              </figure>
+              <figure class="carousel-slide" role="group" style="--strip-ar: 5.2"
+                aria-roledescription="slide" aria-label="7 of 10: ManiSkill &ndash; Insert the peg">
+                <video controls playsinline muted loop preload="metadata"
+                  data-src="./static/video/cases/maniskill/insert_peg_pca3col.mp4"></video>
+                <ul class="strip-cols" data-cols="3" aria-hidden="true">
+                  <li>Input RGB</li>
+                  <li>GT DINO</li>
+                  <li>Predicted DINO</li>
+                </ul>
+                <figcaption>Insert the peg<span class="strip-meta">ManiSkill</span></figcaption>
+              </figure>
+              <figure class="carousel-slide" role="group" style="--strip-ar: 5.2"
+                aria-roledescription="slide" aria-label="8 of 10: MetaWorld &ndash; Open the cabinet door">
+                <video controls playsinline muted loop preload="metadata"
+                  data-src="./static/video/cases/metaworld/open_cabinet_door_pca3col.mp4"></video>
+                <ul class="strip-cols" data-cols="3" aria-hidden="true">
+                  <li>Input RGB</li>
+                  <li>GT DINO</li>
+                  <li>Predicted DINO</li>
+                </ul>
+                <figcaption>Open the cabinet door<span class="strip-meta">MetaWorld</span></figcaption>
+              </figure>
+              <figure class="carousel-slide" role="group" style="--strip-ar: 5.2"
+                aria-roledescription="slide" aria-label="9 of 10: MetaWorld &ndash; Rotate the dial">
+                <video controls playsinline muted loop preload="metadata"
+                  data-src="./static/video/cases/metaworld/rotate_dial_pca3col.mp4"></video>
+                <ul class="strip-cols" data-cols="3" aria-hidden="true">
+                  <li>Input RGB</li>
+                  <li>GT DINO</li>
+                  <li>Predicted DINO</li>
+                </ul>
+                <figcaption>Rotate the dial<span class="strip-meta">MetaWorld</span></figcaption>
+              </figure>
+              <figure class="carousel-slide" role="group" style="--strip-ar: 5.2"
+                aria-roledescription="slide" aria-label="10 of 10: MetaWorld &ndash; Put on the lid">
+                <video controls playsinline muted loop preload="metadata"
+                  data-src="./static/video/cases/metaworld/put_on_lid_pca3col.mp4"></video>
+                <ul class="strip-cols" data-cols="3" aria-hidden="true">
+                  <li>Input RGB</li>
+                  <li>GT DINO</li>
+                  <li>Predicted DINO</li>
+                </ul>
+                <figcaption>Put on the lid<span class="strip-meta">MetaWorld</span></figcaption>
+              </figure>
+                </div>
+              </div>
+            </div>
+          <button class="carousel-arrow carousel-prev" type="button"
+            aria-label="Previous sample">&#10094;</button>
+          <button class="carousel-arrow carousel-next" type="button"
+            aria-label="Next sample">&#10095;</button>
+          <div class="carousel-footer">
+            <div class="carousel-dots" role="tablist" aria-label="Choose a sample">
+            <button class="carousel-dot is-active" type="button" role="tab" aria-selected="true" aria-label="RoboTwin &ndash; Throw away the trash"></button>
+            <button class="carousel-dot" type="button" role="tab" aria-selected="false" aria-label="RoboTwin &ndash; Put the cup on the plate"></button>
+            <button class="carousel-dot" type="button" role="tab" aria-selected="false" aria-label="RoboTwin &ndash; Shake the bottle"></button>
+            <button class="carousel-dot" type="button" role="tab" aria-selected="false" aria-label="RoboTwin &ndash; Rotate the QR-code board"></button>
+            <button class="carousel-dot" type="button" role="tab" aria-selected="false" aria-label="RoboTwin &ndash; Adjust the bottle"></button>
+            <button class="carousel-dot" type="button" role="tab" aria-selected="false" aria-label="ManiSkill &ndash; Plug in the charger"></button>
+            <button class="carousel-dot" type="button" role="tab" aria-selected="false" aria-label="ManiSkill &ndash; Insert the peg"></button>
+            <button class="carousel-dot" type="button" role="tab" aria-selected="false" aria-label="MetaWorld &ndash; Open the cabinet door"></button>
+            <button class="carousel-dot" type="button" role="tab" aria-selected="false" aria-label="MetaWorld &ndash; Rotate the dial"></button>
+            <button class="carousel-dot" type="button" role="tab" aria-selected="false" aria-label="MetaWorld &ndash; Put on the lid"></button>
+            </div>
+            <span class="carousel-counter" aria-live="polite">1 / 10</span>
+          </div>
+          </div>
         </div>
       </article>
-
-      <div class="subsection-grid">
-        <article id="rlbench" class="body-card subsection-card">
-          <h3>RLBench</h3>
-          <div class="libero-grid">
-            <figure class="video-card">
-              <video controls playsinline preload="metadata">
-                <source src="./static/video/rlbench/close_the_red_jar.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-              </video>
-              <figcaption>close the red jar</figcaption>
-            </figure>
-            <figure class="video-card">
-              <video controls playsinline preload="metadata">
-                <source src="./static/video/rlbench/push_the_maroon_button_then_push_the_green_button.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-              </video>
-              <figcaption>push the maroon button then push the green button</figcaption>
-            </figure>
-            <figure class="video-card">
-              <video controls playsinline preload="metadata">
-                <source src="./static/video/rlbench/put_the_item_in_the_middle_drawer.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-              </video>
-              <figcaption>put the item in the middle drawer</figcaption>
-            </figure>
-            <figure class="video-card">
-              <video controls playsinline preload="metadata">
-                <source src="./static/video/rlbench/sweep_dirt_to_the_tall_dustpan.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-              </video>
-              <figcaption>sweep dirt to the tall dustpan</figcaption>
-            </figure>
-          </div>
-        </article>
-
-        <article id="world-model" class="body-card subsection-card">
-          <h3>World Model</h3>
-          <div class="worldmodel-list">
-            <figure class="video-card">
-              <video controls playsinline preload="metadata">
-                <source src="./static/video/worldmodel/libero.mp4?v=20260608-193942" type="video/mp4">
-                Your browser does not support the video tag.
-              </video>
-              <figcaption>libero</figcaption>
-            </figure>
-            <figure class="video-card">
-              <video controls playsinline preload="metadata">
-                <source src="./static/video/worldmodel/realworld-1.mp4?v=20260608-193343" type="video/mp4">
-                Your browser does not support the video tag.
-              </video>
-              <figcaption>realworld-1</figcaption>
-            </figure>
-            <figure class="video-card">
-              <video controls playsinline preload="metadata">
-                <source src="./static/video/worldmodel/realworld-2.mp4?v=20260608-193416" type="video/mp4">
-                Your browser does not support the video tag.
-              </video>
-              <figcaption>realworld-2</figcaption>
-            </figure>
-          </div>
-        </article>
-      </div>
+      <!-- END:CASES -->
     </section>
   </main>
 
+  <footer class="section-shell content-shell content-section">
+    <div class="body-card prose-card">
+      <p style="font-size: 0.82rem; color: var(--muted); margin: 0;">
+        Website template adapted from <a href="https://nerfies.github.io/">Nerfies</a>, used under a
+        <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> license.
+      </p>
+    </div>
+  </footer>
+
   <script>
-    document.querySelectorAll("[data-carousel]").forEach((carousel) => {
-      const track = carousel.querySelector(".carousel-track");
-      const slides = Array.from(track.querySelectorAll(".carousel-slide"));
-      const dots = Array.from(carousel.parentElement.querySelectorAll(".carousel-dot"));
-      const prevButton = carousel.querySelector(".carousel-prev");
-      const nextButton = carousel.querySelector(".carousel-next");
-      let currentIndex = 0;
+    /* 定性结果的左右滑页。认领 [data-carousel],结构/类名由 tools/build_index.py 生成 ——
+       两边是同一个接口,改一边不改另一边的表现是"箭头点了没反应",**不会报错**。
 
-      function updateCarousel(nextIndex) {
-        currentIndex = (nextIndex + slides.length) % slides.length;
-        track.style.transform = `translateX(-${currentIndex * 100}%)`;
+       三件事值得单独说:
+         ① 懒加载:27 case × 2 段 = 54 条带(约 24 MB)。地址写在 data-src 上,只给
+            当前页与左右邻页挂 src —— 否则一开页就并发拉 54 个视频头,首屏被拖死。
+         ② 只播视口内那个 carousel:10 个 carousel 同时解码 H.264 会把笔记本风扇吹起来。
+            用 IntersectionObserver 判断可见性,不可见就整组暂停。
+         ③ 触摸横滑只在横向位移明显大于纵向时才翻页,否则会抢掉页面的纵向滚动。       */
+    (function () {
+      "use strict";
 
-        slides.forEach((slide, index) => {
-          slide.classList.toggle("is-active", index === currentIndex);
-          slide.querySelectorAll("video").forEach((video) => {
-            if (index !== currentIndex) {
+      /* 视口内才加载并播放的独立视频(3D flow 那一组的 2×2 网格)。
+         和滑页共用同一套理由:4 条合计 4.2 MB,开页就拉完没必要;离开视口还在
+         解码点云动画只是白烧 CPU。有 poster,所以加载前不会是一块灰底。 */
+      document.querySelectorAll("[data-inview-videos] video").forEach(function (video) {
+        function stop() { video.pause(); }
+        if (!("IntersectionObserver" in window)) {
+          if (video.dataset.src) video.src = video.dataset.src;
+          return;
+        }
+        new IntersectionObserver(function (entries) {
+          var shown = entries[entries.length - 1].isIntersecting;
+          if (!shown) return stop();
+          if (!video.src && video.dataset.src) video.src = video.dataset.src;
+          var played = video.play();
+          if (played && played.catch) played.catch(function () {});
+        }, { threshold: 0.25 }).observe(video);
+      });
+
+      document.querySelectorAll("[data-carousel]").forEach(function (root) {
+        var win = root.querySelector(".carousel-window");
+        var track = root.querySelector(".carousel-track");
+        var slides = Array.prototype.slice.call(root.querySelectorAll(".carousel-slide"));
+        var dots = Array.prototype.slice.call(root.querySelectorAll(".carousel-dot"));
+        var counter = root.querySelector(".carousel-counter");
+        var prev = root.querySelector(".carousel-prev");
+        var next = root.querySelector(".carousel-next");
+        if (!track || !slides.length) return;
+
+        var index = 0;
+        var visible = false;
+
+        // 滑窗高度跟着当前那条走。真机组里 demo5(5.33) 与 agibot(4.0) 差 33% 的
+        // 高度,取组内最大值会让 15 条 demo5 底下各留一片空白;取当前条就没有。
+        // CSS 的 aspect-ratio 已经把视频高度定死,所以 src 还没挂时量到的也是对的。
+        function syncHeight() {
+          if (win) win.style.height = slides[index].offsetHeight + "px";
+        }
+
+        function render() {
+          track.style.transform = "translateX(-" + index * 100 + "%)";
+
+          slides.forEach(function (slide, i) {
+            var active = i === index;
+            slide.classList.toggle("is-active", active);
+            // inert 而不是 aria-hidden:隐藏页里的 <video controls> 是可聚焦的,
+            // 给它套 aria-hidden 会造出"读屏读不到但 Tab 能跳进去"的坏组合。
+            slide.inert = !active;
+
+            var video = slide.querySelector("video");
+            if (!video) return;
+            if (Math.abs(i - index) <= 1 && !video.src && video.dataset.src) {
+              video.src = video.dataset.src;
+            }
+            if (active && visible) {
+              var played = video.play();
+              // 自动播放被策略拦下就算了,用户还有 controls 可以手点。
+              if (played && played.catch) played.catch(function () {});
+            } else {
               video.pause();
             }
           });
+
+          dots.forEach(function (dot, i) {
+            dot.classList.toggle("is-active", i === index);
+            dot.setAttribute("aria-selected", i === index ? "true" : "false");
+          });
+          if (counter) counter.textContent = index + 1 + " / " + slides.length;
+          syncHeight();
+        }
+
+        function go(target) {
+          index = (target + slides.length) % slides.length;
+          render();
+        }
+
+        if (prev) prev.addEventListener("click", function () { go(index - 1); });
+        if (next) next.addEventListener("click", function () { go(index + 1); });
+        dots.forEach(function (dot, i) {
+          dot.addEventListener("click", function () { go(i); });
         });
 
-        dots.forEach((dot, index) => {
-          dot.classList.toggle("is-active", index === currentIndex);
+        // 焦点在本组的箭头/圆点上时,左右方向键翻页
+        root.addEventListener("keydown", function (e) {
+          if (e.key === "ArrowLeft") { go(index - 1); e.preventDefault(); }
+          else if (e.key === "ArrowRight") { go(index + 1); e.preventDefault(); }
         });
-      }
 
-      prevButton.addEventListener("click", () => updateCarousel(currentIndex - 1));
-      nextButton.addEventListener("click", () => updateCarousel(currentIndex + 1));
+        var x0 = null, y0 = null;
+        root.addEventListener("touchstart", function (e) {
+          var t = e.changedTouches[0];
+          x0 = t.clientX;
+          y0 = t.clientY;
+        }, { passive: true });
+        root.addEventListener("touchend", function (e) {
+          if (x0 === null) return;
+          var t = e.changedTouches[0];
+          var dx = t.clientX - x0, dy = t.clientY - y0;
+          x0 = y0 = null;
+          if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+            go(index + (dx < 0 ? 1 : -1));
+          }
+        }, { passive: true });
 
-      dots.forEach((dot, index) => {
-        dot.addEventListener("click", () => updateCarousel(index));
+        if ("IntersectionObserver" in window) {
+          new IntersectionObserver(function (entries) {
+            visible = entries[entries.length - 1].isIntersecting;
+            render();
+          }, { threshold: 0.25 }).observe(root);
+        } else {
+          visible = true;
+        }
+
+        // 视口变宽窄 → 拼带高度按比例变、caption 可能换行数不同,得重量一次。
+        // 字体是异步加载的(Fraunces/Manrope),字体到位前 caption 高度偏小,
+        // 所以 fonts.ready 之后再量一遍。
+        window.addEventListener("resize", syncHeight);
+        if (document.fonts && document.fonts.ready) {
+          document.fonts.ready.then(syncHeight).catch(function () {});
+        }
+
+        render();
       });
-
-      updateCarousel(0);
-    });
+    })();
   </script>
 </body>
 

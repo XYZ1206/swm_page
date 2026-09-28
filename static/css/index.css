@@ -238,6 +238,26 @@ main {
   margin: 0 auto;
 }
 
+/* teaser 图:比 hero-video 宽(AR 2.23),按原宽高比铺满卡片,不裁切 */
+.hero-media img {
+  width: 100%;
+  height: auto;
+  border-radius: 22px;
+  background: #ece8e2;
+}
+
+.hero-media figcaption {
+  margin-top: 0.75rem;
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: var(--muted);
+  text-align: left;
+}
+
+.hero-media figcaption strong {
+  color: var(--ink);
+}
+
 .hero-video {
   width: 100%;
   aspect-ratio: 16 / 9;
@@ -301,12 +321,112 @@ main {
   margin-bottom: 0.9rem;
 }
 
-#experiments > .section-header {
+/* 一段之内各方块的竖直间距。原模板只给 #experiments 配了这条,后加的
+   #method / #results 没有 —— 表现是 prose 卡片直接贴住下一个 article 的边框,
+   两个 article 之间也没有缝。
+   ⚠ .section-header 自带 margin-bottom: 1.1rem,和这里的 margin-top 会叠加成两倍,
+     所以要一并清零(#experiments 当年就是这么处理的)。                        */
+/* ──────────────────────────────────────────────────────────────────────────
+   3D flow 动画(GT 轨迹在首帧点云上生长)
+   ──────────────────────────────────────────────────────────────────────────
+   这些是单幅渲染(宽高比 1.42~1.57,近似横向 3:2),不是结果段那种多列拼带,
+   所以走 2×2 网格而不是滑页:4 条一眼看全,不必翻。
+   一行铺 4 条的话每条只有 ~265px 宽,turbo 细轨迹会糊成一片。
+
+   ⚠ align-items: start 必须有:四条宽高比不同(1.5703/1.4378/1.5495/1.4152),
+     默认 stretch 会把同一行里矮的那条拉高,底部留白。                        */
+.flow3d-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  align-items: start;
+}
+
+.flow3d-card {
+  margin: 0;
+  padding: 0.8rem 0.85rem 0.7rem;
+  border-radius: var(--radius-md);
+}
+
+/* --f3d-ar 逐条实测(tools/collect_flow3d.py 打印的 ar),用于懒加载前占位。
+   有 poster 时其实不会看到灰底,但 poster 与视频同宽高比,占位仍要准,
+   否则 poster → 视频切换的瞬间高度会跳。 */
+.flow3d-card video {
+  width: 100%;
+  height: auto;
+  aspect-ratio: var(--f3d-ar, 1.5);
+  object-fit: contain;
+  border-radius: 14px;
+  /* 渲染底色是白的,给个浅灰底才看得出边界 */
+  background: #f4f1ec;
+}
+
+.flow3d-card figcaption {
+  margin-top: 0.6rem;
+  text-align: center;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+#experiments > .section-header,
+#method > .section-header,
+#flow3d > .section-header,
+#results > .section-header {
   margin-bottom: 0;
 }
 
-#experiments > * + * {
-  margin-top: 1rem;
+#experiments > * + *,
+#method > * + *,
+#flow3d > * + *,
+#results > * + * {
+  margin-top: 1.15rem;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   三条贡献:并排三块
+   ──────────────────────────────────────────────────────────────────────────
+   1080px 的内容壳分三列 ≈ 每列 330px,正文再窄就不好读了,故 980px 以下退成单列。
+   align-items: start 是必须的:三段话长短不一,默认 stretch 会把短的拉到最高那块
+   的高度,底部留一片空白。                                                  */
+.contrib-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  align-items: start;
+}
+
+.contrib-card {
+  padding: 1.1rem 1.15rem 1.2rem;
+}
+
+.contrib-index {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.9rem;
+  height: 1.9rem;
+  border-radius: 999px;
+  background: rgba(36, 95, 122, 0.12);
+  color: var(--accent-strong);
+  font-size: 0.8rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.contrib-card h3 {
+  margin: 0.7rem 0 0.5rem;
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 1.06rem;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+
+.contrib-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.93rem;
+  line-height: 1.72;
 }
 
 #real-world {
@@ -512,9 +632,199 @@ main {
   transform: scale(1.15);
 }
 
+/* ──────────────────────────────────────────────────────────────────────────
+   宽幅拼带 + 按数据源分组的左右滑页(DynaRep 的定性结果)
+   ──────────────────────────────────────────────────────────────────────────
+   这些视频是**多列横向拼好的一条带**,宽高比 4.0~5.3(3 列),一条就占满卡片宽度,
+   所以不能进 .libero-grid 那种网格 —— 一行放两条会缩到看不清。而 27 个 case × 2 段
+   = 54 条带竖着平铺要滚很久,故**按数据源分组、每组一个左右滑页**,一次只显示一条。
+
+   列标题放在**每张 slide 内部**(而不是提到组标题旁):提出去就得自己去和视频的
+   三等分列对齐,而卡片有 padding、视频宽度随视口变 —— 总会在某个断点上错开。
+   放进 slide 里与视频同宽同 padding、靠 grid 三等分,就永远对齐。
+   标题也**不画进视频**(画进去随视频一起缩放,小屏上先糊掉的就是字)。
+
+   行为(翻页/懒加载/只播视口内那个)在 index.html 页尾的脚本里,靠 [data-carousel]
+   认领;**类名与这里的结构是两边的接口**,改一边不改另一边 = 箭头点了没反应,不报错。 */
+.source-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.6rem;
+}
+
+.source-count {
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.strip-carousel {
+  position: relative;
+}
+
+/* 箭头相对 stage 定位(stage 只含滑窗,不含圆点行),否则会被圆点行拉低。 */
+.carousel-stage {
+  position: relative;
+}
+
+/* ⚠ 真机组里混着两种宽高比(demo5 3072×576 = 5.33,agibot 1920×480 = 4.0,差 33%
+   的高度),所以滑窗高度必须**跟着当前那条走** —— 由页尾脚本量出当前 slide 的高度
+   写进 height,这里只负责让它平滑过渡。
+   同时 track 必须 flex-start:默认 stretch 会把所有 slide 拉到最高那条的高度,
+   脚本量到的就全是那个最大值,等于白量(表现:15 条 demo5 底下各留一片空白)。 */
+.strip-carousel .carousel-window {
+  transition: height 280ms ease;
+}
+
+.strip-carousel .carousel-track {
+  align-items: flex-start;
+}
+
+.strip-carousel .carousel-slide {
+  padding: 0.8rem 0.85rem 0.7rem;
+  border-radius: var(--radius-sm);
+}
+
+/* ⚠ aspect-ratio 是为**懒加载**留的占位:src 挂上之前视频没有内在尺寸,
+   不占位则每次挂载/翻页高度都从 0 跳到真实值,整页跟着抖一下。
+   --strip-ar 由 build_index.py 用 ffprobe **逐条**实测后写在每张 slide 上
+   (逐组写会把同组里宽高比不同的那种压扁);探测失败时退回 5.2(三个仿真源的
+   实测值,2496×480)。                                                   */
+.strip-carousel .carousel-slide video {
+  aspect-ratio: var(--strip-ar, 5.2);
+  border-radius: 12px;
+  box-shadow: none;
+}
+
+.strip-carousel .carousel-slide figcaption {
+  margin-top: 0.5rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* 分组只分到真机/仿真两级,所以每条要自报来自哪个数据集 */
+.strip-carousel .strip-meta {
+  display: block;
+  margin-top: 0.15rem;
+  font-size: 0.74rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* 拼带很宽很矮,箭头若按整个 stage 垂直居中会压在列标题上 ——
+   减掉列标题 + caption 那约 3.6rem 的一半,把它顶回视频的中线附近。 */
+.strip-carousel .carousel-arrow {
+  top: calc(50% - 1.8rem);
+  width: 2.4rem;
+  height: 2.4rem;
+  font-size: 1rem;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(6px);
+}
+
+/* 宽屏时把箭头甩到卡片外的页边空白里,别压住画面;窄屏(下面的 media query)
+   没有那点空白,只能压在画面边缘。 */
+.strip-carousel .carousel-prev {
+  left: -2.6rem;
+}
+
+.strip-carousel .carousel-next {
+  right: -2.6rem;
+}
+
+.carousel-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.9rem;
+  margin-top: 0.75rem;
+}
+
+.carousel-footer .carousel-dots {
+  margin-top: 0;
+  flex-wrap: wrap;
+}
+
+/* 计数器:demo5 有 15 条,单看圆点数不出来"第几条/共几条"。
+   等宽数字 + 固定最小宽,翻页时这行字不会左右跳。 */
+.carousel-counter {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  min-width: 3.4rem;
+  text-align: right;
+}
+
+/* 列标题:用 grid 均分,与拼带的列一一对齐(列数由 data 属性给) */
+.strip-cols {
+  display: grid;
+  gap: 0;
+  margin: 0.45rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.strip-cols[data-cols="3"] { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.strip-cols[data-cols="4"] { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+.strip-cols li {
+  text-align: center;
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+/* 每个 subsection 顶部的一段说明(在 h3 之下、视频之上) */
+.subsection-lede {
+  margin: 0 0 1.1rem;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+/* 源分组:一组 = 一个数据源 = 一个滑页 */
+.source-group + .source-group {
+  margin-top: 1.9rem;
+  padding-top: 1.6rem;
+  border-top: 1px solid var(--line);
+}
+
+.source-group h4 {
+  margin: 0;
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
 @media (max-width: 980px) {
   .libero-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .contrib-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* 断点算法:内容壳是 min(100% - 2rem, 1080px),视口 ≥ ~1128px 时两侧才有
+   ≥1.5rem 的页边空白够放箭头。低于此就没地方甩了,只能压回画面边缘。 */
+@media (max-width: 1160px) {
+  .strip-carousel .carousel-prev {
+    left: 0.3rem;
+  }
+
+  .strip-carousel .carousel-next {
+    right: 0.3rem;
   }
 }
 
@@ -569,5 +879,35 @@ main {
 
   .libero-grid {
     grid-template-columns: 1fr;
+  }
+
+  .flow3d-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* 窄屏上列标题会挤成竖排,字号再降一档并允许断行 */
+  .strip-cols li {
+    font-size: 0.62rem;
+    line-height: 1.25;
+  }
+
+  /* 手机上拼带只有几十像素高,2.4rem 的箭头会盖掉小半屏 —— 缩小,并按拼带自身
+     高度居中(此时 stage 高度里列标题+caption 占比更大,固定的 -1.8rem 会偏)。 */
+  .strip-carousel .carousel-arrow {
+    width: 1.9rem;
+    height: 1.9rem;
+    font-size: 0.8rem;
+    top: calc(50% - 1.4rem);
+  }
+
+  .carousel-footer {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .carousel-counter {
+    min-width: 0;
+    text-align: center;
+    width: 100%;
   }
 }
