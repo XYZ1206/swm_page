@@ -22,7 +22,7 @@ import os
 import shutil
 import subprocess
 
-SRC_ROOT = "/mnt/home/zhaochengzhi/Project/cosmos-rbs/outputs/dino_flow_test_gen_run/swm/cosmos3-nano-dino-sft/dino-flow-async-fm-2/TestFlowGeneration/Iter000008000/seed12_ema/demo5/case/4"
+SRC_ROOT = "/mnt/home/lijuelin/latent-wm/paper_figs/video3d_20"
 VID_REL = os.path.join("static", "video", "flow3d")
 IMG_REL = os.path.join("static", "images", "flow3d")
 POSTER_W = 900          # 海报只为占位/首屏观感,不需要原始 1600+ 宽
@@ -31,10 +31,10 @@ POSTER_W = 900          # 海报只为占位/首屏观感,不需要原始 1600+ 
 # —— 那是原始采集时人给的自然语言指令,页面是英文站,故此处翻译后写死,
 # 并在下面校验 stem 仍存在(源目录若换了 case,这里要报错而不是静默少放一条)。
 CASES = [
-    ("episode_0032_20260725_110441", "Put the white cup on the blue coaster."),
-    ("episode_0570_20260813_194955", "Put the Vinda wet wipe toy to the right of the red ring."),
-    ("episode_0904_20260802_174203", "Put the black hair clip on the card set."),
-    ("episode_1694_20260805_204923", "Put the toy car to the right of the Sun Wukong block box."),
+    ("episode_1395_20260725_201904", "Put the red chilli into the stainless-steel bowl"),
+    ("episode_0039_20260802_104111", "Put the Hello Kitty charm right of the car diffuser"),
+    ("episode_0152_20260813_174316", "Put the mug to the left of the blue tray"),
+    ("episode_0350_20260808_145449", "Put the green tin right of the vending-machine toy"),
 ]
 
 

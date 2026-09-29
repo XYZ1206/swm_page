@@ -36,8 +36,10 @@ END = "<!-- END:CASES -->"
 #   **冻结首帧**上、全程累积并用颜色编码时间(GT 与预测共用同一套配色 → 可直接比形状)。
 # ⚠ pca 源是 4 列,collect_cases.py 已裁掉第 3 列(DINO-VAE 往返重建)→ 这里只剩 3 列。
 #   两处必须同步:改了 --drop-pca-col 就要改这张表,否则标题会与画面错位而**不报错**。
+# ⚠ 第 1 列叫 **GT video** 而不是 "Input video"(2026-09-28 用户纠正):模型只吃首帧,
+#   整段视频不是输入,是真值。标成 "Input" 会让人以为模型看过后续帧。
 COLS = {
-    "tracks": ["Input video", "GT object flow", "Predicted object flow"],
+    "tracks": ["GT video", "GT object flow", "Predicted object flow"],
     "pca": ["Input RGB", "GT DINO", "Predicted DINO"],
 }
 
